@@ -1,17 +1,36 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 )
 
-func main() {
-	public_key := `
------BEGIN RSA PUBLIC KEY-----
-YOUR PUBLIC KEY
------END RSA PUBLIC KEY-----`
-	api_key := "YOUR API KEY"
+type KEYS struct {
+	PUBLICKEY string
+	APIKEY    string
+}
 
-	test := APICONTEXT{PUBLICKEY: public_key, APIKEY: api_key}
+func main() {
+
+	keys, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		log.Fatal("Error opening config file: ", err)
+	}
+	var Keys KEYS
+	err = json.Unmarshal(keys, &Keys)
+	if err != nil {
+		log.Fatal("Error during Unmarshal: ", err)
+	}
+
+	publicKey := fmt.Sprintf(`
+-----BEGIN RSA PUBLIC KEY-----
+%s
+-----END RSA PUBLIC KEY-----`, Keys.PUBLICKEY)
+	apiKey := Keys.APIKEY
+
+	test := APICONTEXT{PUBLICKEY: publicKey, APIKEY: apiKey}
 
 	// b2BtransactionQuery := make(map[string]string)
 
