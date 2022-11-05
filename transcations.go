@@ -1,4 +1,4 @@
-package main
+package gopesa
 
 import (
 	"bytes"
@@ -17,11 +17,13 @@ func (api *APICONTEXT) C2BPayments(transactionQuery map[string]string) string {
 	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
 	api.addHeader("Authorization", bearer)
 
-	jsonParameters, _ := json.Marshal(api.parameters)
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing C2B transaction queries: ", err)
 
 	endpoint := "c2bPayment/singleStage"
 
-	req, _ := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	req, err := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New C2B request: ", err)
 
 	for k, v := range api.getHeaders() {
 		req.Header.Set(k, v)
@@ -29,17 +31,11 @@ func (api *APICONTEXT) C2BPayments(transactionQuery map[string]string) string {
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	mustNot("Error getting C2B response", err)
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	mustNot("Error reading C2B response body: ", err)
 
 	return string(body)
 
@@ -55,11 +51,13 @@ func (api *APICONTEXT) B2BPayments(transactionQuery map[string]string) string {
 	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
 	api.addHeader("Authorization", bearer)
 
-	jsonParameters, _ := json.Marshal(api.parameters)
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing B2B transaction queries: ", err)
 
 	endpoint := "b2bPayment"
 
-	req, _ := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	req, err := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New B2B request: ", err)
 
 	for k, v := range api.getHeaders() {
 		req.Header.Set(k, v)
@@ -67,13 +65,11 @@ func (api *APICONTEXT) B2BPayments(transactionQuery map[string]string) string {
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	mustNot("Error getting B2B response: ", err)
 
 	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading B2B response body: ", err)
 
 	return string(body)
 }
