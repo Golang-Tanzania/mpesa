@@ -19,7 +19,7 @@ func (api *APICONTEXT) C2BPayments(transactionQuery map[string]string) string {
 
 	jsonParameters, _ := json.Marshal(api.parameters)
 
-	endpoint := "c2bPayment"
+	endpoint := "c2bPayment/singleStage"
 
 	req, _ := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
 
