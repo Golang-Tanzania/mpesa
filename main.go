@@ -18,13 +18,13 @@ YOUR PUBLIC KEY
 	// b2BtransactionQuery["input_Amount"] = "10"
 	// b2BtransactionQuery["input_Country"] = "TZN"
 	// b2BtransactionQuery["input_Currency"] = "TZS"
-	// b2BtransactionQuery["input_CustomerMSISDN"] = "000000000001"
+	// b2BtransactionQuery["input_PrimaryPartyCode"] = "000000"
+	// b2BtransactionQuery["input_ReceiverPartyCode"] = "000001"
 	// b2BtransactionQuery["input_ServiceProviderCode"] = "000000"
-	// b2BtransactionQuery["input_ThirdPartyConversationID"] = "2edf7a0206d848f6b6fedea26accdc3a"
-	// b2BtransactionQuery["input_TransactionReference"] = "T23434ZE5"
-	// b2BtransactionQuery["input_PurchasedItemsDesc"] = "Python Book"
+	// b2BtransactionQuery["input_ThirdPartyConversationID"] = "8a89835c71f15e99396"
+	// b2BtransactionQuery["input_TransactionReference"] = "T1234C"
+	// b2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 
-	// // fmt.Println(test.generateSessionID())
 	// fmt.Println(test.B2BPayments(b2BtransactionQuery))
 
 	c2BtransactionQuery := make(map[string]string)
