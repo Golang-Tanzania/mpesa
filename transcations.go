@@ -106,3 +106,38 @@ func (api *APICONTEXT) B2BPayment(transactionQuery map[string]string) string {
 
 	return string(body)
 }
+
+
+func (api *APICONTEXT) ReversePayment(transactionQuery map[string]string) string {
+	api.APIKEY = api.generateSessionID()
+
+	for k, v := range transactionQuery {
+		api.addParameter(k, v)
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
+	api.addHeader("Authorization", bearer)
+
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing reversal transaction queries: ", err)
+
+	endpoint := "reversal"
+
+	req, err := http.NewRequest("PUT", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New payment reversal request: ", err)
+
+	for k, v := range api.getHeaders() {
+		req.Header.Set(k, v)
+	}
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	mustNot("Error getting payment reversal response: ", err)
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading payment reversal response body: ", err)
+
+	return string(body)
+}
+
