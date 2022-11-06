@@ -96,7 +96,7 @@ import (
 
 func main() {
 
-   // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type gopesa.APICONTEXT
 
     var test gopesa.APICONTEXT
 
@@ -106,18 +106,18 @@ func main() {
 
     // Create a new map query that maps strings to strings
 
-	c2BtransactionQuery := make(map[string]string)
+    c2BtransactionQuery := make(map[string]string)
 
-	c2BtransactionQuery["input_Amount"] = "10"
-	c2BtransactionQuery["input_CustomerMSISDN"] = "000000000001"
-	c2BtransactionQuery["input_Country"] = "TZN"
-	c2BtransactionQuery["input_Currency"] = "TZS"
-	c2BtransactionQuery["input_ServiceProviderCode"] = "000000"
-	c2BtransactionQuery["input_TransactionReference"] = "T12344C"
-	c2BtransactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-	c2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
+    c2BtransactionQuery["input_Amount"] = "10"
+    c2BtransactionQuery["input_CustomerMSISDN"] = "000000000001"
+    c2BtransactionQuery["input_Country"] = "TZN"
+    c2BtransactionQuery["input_Currency"] = "TZS"
+    c2BtransactionQuery["input_ServiceProviderCode"] = "000000"
+    c2BtransactionQuery["input_TransactionReference"] = "T12344C"
+    c2BtransactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
+    c2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 
-	fmt.Println(test2.C2BPayment(c2BtransactionQuery))
+    fmt.Println(test2.C2BPayment(c2BtransactionQuery))
 }
 
 ```
@@ -145,13 +145,13 @@ func main() {
     b2CtransactionQuery := make(map[string]string)
 
     b2CtransactionQuery["input_Amount"] = "250"
-	b2CtransactionQuery["input_Country"] = "TZN"
-	b2CtransactionQuery["input_Currency"] = "TZS"
-	b2CtransactionQuery["input_CustomerMSISDN"] = "000000000001"
-	b2CtransactionQuery["input_ServiceProviderCode"] = "000000"
-	b2CtransactionQuery["input_ThirdPartyConversationID"] = "f5e420e99594a9c496d8600"
-	b2CtransactionQuery["input_TransactionReference"] = "T12345C"
-	b2CtransactionQuery["input_PaymentItemsDesc"] = "Donation"
+    b2CtransactionQuery["input_Country"] = "TZN"
+    b2CtransactionQuery["input_Currency"] = "TZS"
+    b2CtransactionQuery["input_CustomerMSISDN"] = "000000000001"
+    b2CtransactionQuery["input_ServiceProviderCode"] = "000000"
+    b2CtransactionQuery["input_ThirdPartyConversationID"] = "f5e420e99594a9c496d8600"
+    b2CtransactionQuery["input_TransactionReference"] = "T12345C"
+    b2CtransactionQuery["input_PaymentItemsDesc"] = "Donation"
 
     fmt.Println(test.B2CPayment(b2CtransactionQuery))
 
@@ -178,19 +178,19 @@ func main() {
 
     // Create a new map query that maps strings to strings
 
-	b2BtransactionQuery := make(map[string]string)
+    b2BtransactionQuery := make(map[string]string)
 
-	b2BtransactionQuery["input_Amount"] = "10"
-	b2BtransactionQuery["input_Country"] = "TZN"
-	b2BtransactionQuery["input_Currency"] = "TZS"
-	b2BtransactionQuery["input_PrimaryPartyCode"] = "000000"
-	b2BtransactionQuery["input_ReceiverPartyCode"] = "000001"
-	b2BtransactionQuery["input_ServiceProviderCode"] = "000000"
-	b2BtransactionQuery["input_ThirdPartyConversationID"] = "8a89835c71f15e99396"
-	b2BtransactionQuery["input_TransactionReference"] = "T1234C"
-	b2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
+    b2BtransactionQuery["input_Amount"] = "10"
+    b2BtransactionQuery["input_Country"] = "TZN"
+    b2BtransactionQuery["input_Currency"] = "TZS"
+    b2BtransactionQuery["input_PrimaryPartyCode"] = "000000"
+    b2BtransactionQuery["input_ReceiverPartyCode"] = "000001"
+    b2BtransactionQuery["input_ServiceProviderCode"] = "000000"
+    b2BtransactionQuery["input_ThirdPartyConversationID"] = "8a89835c71f15e99396"
+    b2BtransactionQuery["input_TransactionReference"] = "T1234C"
+    b2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 
-	fmt.Println(test.B2BPayment(b2BtransactionQuery))
+    fmt.Println(test.B2BPayment(b2BtransactionQuery))
 ```
 
 ## Authors
