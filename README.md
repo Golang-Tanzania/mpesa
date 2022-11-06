@@ -8,7 +8,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - [x] Bussiness to Bussiness (B2B)
 - [x] Bussiness to Customer (B2C)
 - [x] Payment Reversal
-- [ ] Query Transaction status
+- [X] Query Transaction status
 - [ ] Direct debit creation and Payment
 
 ## Pre-requisites
@@ -225,6 +225,38 @@ func main() {
     paymentReversaltranscQuery["input_TransactionID"] = "0000000000001"
 
     fmt.Println(test.ReversePayment(paymentReversaltranscQuery))
+```
+
+### Query Transaction status
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    transanctionStatusQuery := make(map[string]string)
+
+    transanctionStatusQuery["input_QueryReference"] = "000000000000000000001"
+    transanctionStatusQuery["input_ServiceProviderCode"] = "000000"
+    transanctionStatusQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
+    transanctionStatusQuery["input_Country"] = "TZN"
+
+    fmt.Println(test.TransactionStatus(transanctionStatusQuery))
 ```
 
 ## Authors
