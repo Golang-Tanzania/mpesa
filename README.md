@@ -126,7 +126,7 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	gopesa "github.com/Golang-Tanzania/GoPesa@v0.1.2"
     "fmt"
 )
 
@@ -154,6 +154,7 @@ func main() {
     b2CtransactionQuery["input_PaymentItemsDesc"] = "Donation"
 
     fmt.Println(test.B2CPayment(b2CtransactionQuery))
+}
 
 ```
 ### Business To Business
@@ -191,6 +192,7 @@ func main() {
     b2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 
     fmt.Println(test.B2BPayment(b2BtransactionQuery))
+}
 ```
 
 
@@ -225,6 +227,7 @@ func main() {
     paymentReversaltranscQuery["input_TransactionID"] = "0000000000001"
 
     fmt.Println(test.ReversePayment(paymentReversaltranscQuery))
+}
 ```
 
 ### Query Transaction status
@@ -257,6 +260,7 @@ func main() {
     transanctionStatusQuery["input_Country"] = "TZN"
 
     fmt.Println(test.TransactionStatus(transanctionStatusQuery))
+}
 ```
 
 ## Authors
