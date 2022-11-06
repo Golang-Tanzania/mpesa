@@ -1,6 +1,6 @@
 # GoPesa
 
-Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Easily make your MPESA payments ready to GO! (*pun intended*)
+Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make your MPESA payments *Ready... To... Gooo!* (*pun intended*). Made with love for gophers.
 
 ## Features
 
@@ -195,7 +195,7 @@ func main() {
 
 ## Authors
 
-This package has been authored by [Mojo](https://github.com/AvicennaJr) and [HoperTZ](https://github.com/Hopertz)
+This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [HoperTZ](https://github.com/Hopertz)
 
 ## License
 
