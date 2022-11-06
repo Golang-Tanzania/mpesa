@@ -141,3 +141,37 @@ func (api *APICONTEXT) ReversePayment(transactionQuery map[string]string) string
 	return string(body)
 }
 
+
+func (api *APICONTEXT) TransactionStatus(transactionQuery map[string]string) string {
+	api.APIKEY = api.generateSessionID()
+
+	for k, v := range transactionQuery {
+		api.addParameter(k, v)
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
+	api.addHeader("Authorization", bearer)
+
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing transactionstatus queries: ", err)
+
+	endpoint := "queryTransactionStatus"
+
+	req, err := http.NewRequest("GET", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New transaction status request: ", err)
+
+	for k, v := range api.getHeaders() {
+		req.Header.Set(k, v)
+	}
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	mustNot("Error getting transaction status response: ", err)
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading transaction status response body: ", err)
+
+	return string(body)
+}
+
