@@ -193,9 +193,43 @@ func main() {
     fmt.Println(test.B2BPayment(b2BtransactionQuery))
 ```
 
+
+### Payment Reversal
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    paymentReversaltranscQuery := make(map[string]string)
+
+    paymentReversaltranscQuery["input_ReversalAmount"] = "25"
+    paymentReversaltranscQuery["input_Country"] = "TZN"
+    paymentReversaltranscQuery["input_ServiceProviderCode"] = "000000"
+    paymentReversaltranscQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
+    paymentReversaltranscQuery["input_TransactionID"] = "0000000000001"
+
+    fmt.Println(test.ReversePayment(paymentReversaltranscQuery))
+```
+
 ## Authors
 
-This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [HoperTZ](https://github.com/Hopertz)
+This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz)
 
 ## License
 
