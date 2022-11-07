@@ -1,3 +1,28 @@
+/*
+Copyright (c) 2022 Golang Tanzania
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+// Golang bindings for the
+// Mpesa Payment API (see https://openapiportal.m-pesa.com),
+// to easily make your MPESA payments ready to GO.
 package gopesa
 
 import (
@@ -13,21 +38,22 @@ import (
 	"net/http"
 )
 
-// Type KEYS that will be assigned from config.json
-
-type KEYS struct {
+// Type kEYS that will receive values from the config.json
+type kEYS struct {
 	PUBLICKEY string
 	APIKEY    string
 }
 
-// Initialization method
-
+// Initialization method that will read keys from
+// config.json and assign them to PUBLICKEY AND APIKEY
+// It will return a pointer of APICONTEXT with the
+// new keys
 func (api *APICONTEXT) Initialize(file string) *APICONTEXT {
 
 	keys, err := ioutil.ReadFile(file)
 	mustNot("Error reading file: ", err)
 
-	var Keys KEYS
+	var Keys kEYS
 	err = json.Unmarshal(keys, &Keys)
 	mustNot("Error during Unmarshal: ", err)
 
@@ -43,8 +69,9 @@ func (api *APICONTEXT) Initialize(file string) *APICONTEXT {
 	return api
 }
 
-// Create new bearer token
-
+// A method that will create a new bearer token
+// It will return a string with the value of the
+// bearer token
 func (api *APICONTEXT) createBearerToken(apiKey string) string {
 	keyDer, _ := pem.Decode([]byte(api.PUBLICKEY))
 	pub, _ := x509.ParsePKIXPublicKey([]byte(keyDer.Bytes))
@@ -56,8 +83,8 @@ func (api *APICONTEXT) createBearerToken(apiKey string) string {
 	return encryptedKey
 }
 
-// Generate a new session ID
-
+//  A method that will generate a new session ID
+// It will return the session ID as a string
 func (api *APICONTEXT) generateSessionID() string {
 	api.setDefault()
 	endpoint := "getSession"

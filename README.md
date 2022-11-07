@@ -1,5 +1,11 @@
 # GoPesa
 
+![GoPesa](./assets/gopesa.svg)
+
+[![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](https://go.dev/)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/gomods/athens.svg)](https://github.com/Golang-Tanzania/GoPesa)
+[![GoDoc reference example](https://img.shields.io/badge/godoc-reference-blue.svg)](https://github.com/Golang-Tanzania/GoPesa)
+
 Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make your MPESA payments *Ready... To... Gooo!* (*pun intended*). Made with love for gophers.
 
 ## Features

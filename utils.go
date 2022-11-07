@@ -1,3 +1,25 @@
+/*
+Copyright (c) 2022 Golang Tanzania
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package gopesa
 
 import (
@@ -5,16 +27,14 @@ import (
 	"log"
 )
 
-// Helper function to check errors
-
+// A helper function that will check errors
 func mustNot(message string, err error) {
 	if err != nil {
 		log.Println(message, err)
 	}
 }
 
-// Type APICONTEXT
-
+// Type APICONTEXT that stores the API's configurable info
 type APICONTEXT struct {
 	PUBLICKEY   string
 	APIKEY      string
@@ -26,8 +46,8 @@ type APICONTEXT struct {
 	parameters  map[string]string
 }
 
-// Helper methods for APICONTEXT
-
+// setDefualt to set default values on the APICONTEXT type
+// It will also add the default headers
 func (api *APICONTEXT) setDefault() {
 
 	api.address = "openapi.m-pesa.com"
@@ -49,6 +69,9 @@ func (api *APICONTEXT) setDefault() {
 
 }
 
+// getURL will get the absolute URL
+// It will return http or https depending on the value of ssl
+// Default URL is https://
 func (api *APICONTEXT) getURL(endpoint string) string {
 	url := ""
 	if api.ssl {
@@ -60,22 +83,28 @@ func (api *APICONTEXT) getURL(endpoint string) string {
 	return url
 }
 
+// addHeader will add key/value header pairs to APICONTEXT.headers
 func (api *APICONTEXT) addHeader(key, value string) {
 	api.headers[key] = value
 }
 
+// Get all headers assigned to APICONTEXT.headers
 func (api *APICONTEXT) getHeaders() map[string]string {
 	return api.headers
 }
 
+// addParameter will add key/value parameters to APICONTEXT.parameters
+// Paramters are the transaction queries
 func (api *APICONTEXT) addParameter(key, value string) {
 	api.parameters[key] = value
 }
 
+// Get all paramters assigned to APICONTEXT.parameters
 func (api *APICONTEXT) getParameters() map[string]string {
 	return api.parameters
 }
 
+// getPath will determine the endpoints to be used depending on the kind of transaction.
 func (api *APICONTEXT) getPath(url string) string {
 	if api.ENVIRONMENT == "production" {
 		return fmt.Sprintf("/openapi/ipg/v2/vodacomTZN/%v/", url)
