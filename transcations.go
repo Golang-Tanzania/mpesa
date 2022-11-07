@@ -310,6 +310,40 @@ func (api *APICONTEXT) DirectDebitCreate(transactionQuery map[string]string) str
 	return string(body)
 }
 
+func (api *APICONTEXT) DirectDebitPayment(transactionQuery map[string]string) string {
+	api.APIKEY = api.generateSessionID()
+
+	for k, v := range transactionQuery {
+		api.addParameter(k, v)
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
+	api.addHeader("Authorization", bearer)
+
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing query direct debit payment: ", err)
+
+	endpoint := "directDebitPayment"
+
+	req, err := http.NewRequest("POST", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New query direct debit payment request: ", err)
+
+	for k, v := range api.getHeaders() {
+		req.Header.Set(k, v)
+	}
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	mustNot("Error getting query direct debit payment response: ", err)
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading query direct debit payment response body: ", err)
+
+	return string(body)
+}
+
+
 
 
 
