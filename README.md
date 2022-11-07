@@ -16,7 +16,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - [x] Payment Reversal
 - [x] Query Transaction status
 - [x] Query Beneficiary Name
-- [ ] Query Direct Debit
+- [x] Query Direct Debit
 - [ ] Direct Debit Create
 - [ ] Direct Debit Payment
 
