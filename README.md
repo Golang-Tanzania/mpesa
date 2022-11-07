@@ -18,7 +18,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - [x] Query Beneficiary Name
 - [x] Query Direct Debit
 - [x] Direct Debit Create
-- [ ] Direct Debit Payment
+- [x] Direct Debit Payment
 
 ## Pre-requisites
 
@@ -382,6 +382,43 @@ func main() {
 
 
     fmt.Println(test.DirectDebitCreate(DDCQuery))
+}
+```
+### Direct Debit Payment 
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    DDPQuery := make(map[string]string)
+
+    DDPQuery["input_Amount"] = "10"
+    DDPQuery["input_Country"] = "TZN"
+    DDPQuery["input_Currency"] = "TZS"
+    DDPQuery["input_CustomerMSISDN"] = "000000000001"
+    DDPQuery["input_ServiceProviderCode"] = "000000"
+    DDPQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
+    DDPQuery["input_ThirdPartyReference"] = "5db410b459bd433ca8e5"
+    DDPQuery["input_MandateID"] = "15045"
+
+
+    fmt.Println(test.DirectDebitPayment(DDPQuery))
 }
 ```
 ## Authors
