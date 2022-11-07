@@ -112,3 +112,37 @@ func (api *APICONTEXT) getPath(url string) string {
 		return fmt.Sprintf("/sandbox/ipg/v2/vodacomTZN/%v/", url)
 	}
 }
+
+
+
+func (api * APICONTEXT) sendRequest(transactionQuery map[string]string,method string ,endpoint string) string {
+	api.APIKEY = api.generateSessionID()
+	for k, v := range transactionQuery {
+		api.addParameter(k, v)
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
+	api.addHeader("Authorization", bearer)
+
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing transaction queries: ", err)
+
+
+	req, err := http.NewRequest(method, api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New request: ", err)
+
+	for k, v := range api.getHeaders() {
+		req.Header.Set(k, v)
+	}
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	mustNot("Error getting response", err)
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading response body: ", err)
+
+	return string(body)
+
+}
