@@ -14,8 +14,8 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - [x] Bussiness to Bussiness (B2B)
 - [x] Bussiness to Customer (B2C)
 - [x] Payment Reversal
-- [X] Query Transaction status
-- [ ] Query Beneficiary Name
+- [x] Query Transaction status
+- [x] Query Beneficiary Name
 - [ ] Query Direct Debit
 - [ ] Direct Debit Create
 - [ ] Direct Debit Payment
@@ -272,6 +272,38 @@ func main() {
 }
 ```
 
+### Query Beneficiary Name
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    BeneficiaryNameQuery := make(map[string]string)
+
+    BeneficiaryNameQuery["input_CustomerMSISDN"] = "255742051622"
+    BeneficiaryNameQuery["input_ServiceProviderCode"] = "000000"
+    BeneficiaryNameQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
+    BeneficiaryNameQuery["input_Country"] = "TZN"
+    BeneficiaryNameQuery["input_KycQueryType"] = "Name"
+    fmt.Println(test.QueryBeneficiaryName(BeneficiaryNameQuery))
+}
+```
 ## Authors
 
 This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz)
