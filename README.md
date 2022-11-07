@@ -304,6 +304,45 @@ func main() {
     fmt.Println(test.QueryBeneficiaryName(BeneficiaryNameQuery))
 }
 ```
+### Query Direct Debit
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    DirectDebitQuery := make(map[string]string)
+
+    DirectDebitQuery["input_QueryBalanceAmount"] = "True"
+    DirectDebitQuery["input_BalanceAmount"] = "100"
+    DirectDebitQuery["input_Country"] = "TZN"
+    DirectDebitQuery["input_CustomerMSISDN"] = "255744553111"
+    DirectDebitQuery["input_MsisdnToken"] = "cvgwUBZ3lAO9ivwhWAFeng=="
+    DirectDebitQuery["input_ServiceProviderCode"] = "112244"
+    DirectDebitQuery["input_ThirdPartyConversationID"] = "GPO3051656128"
+    DirectDebitQuery["input_ThirdPartyReference"] = "Test123"
+    DirectDebitQuery["input_MandateID"] = "15045"
+    DirectDebitQuery["input_Currency"] = "TZS"
+
+
+    fmt.Println(test.QueryDirectDebit(DirectDebitQuery))
+}
+```
 ## Authors
 
 This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz)
