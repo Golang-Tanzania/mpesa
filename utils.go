@@ -23,8 +23,12 @@ SOFTWARE.
 package gopesa
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 )
 
 // A helper function that will check errors
@@ -113,9 +117,7 @@ func (api *APICONTEXT) getPath(url string) string {
 	}
 }
 
-
-
-func (api * APICONTEXT) sendRequest(transactionQuery map[string]string,method string ,endpoint string) string {
+func (api *APICONTEXT) sendRequest(transactionQuery map[string]string, method string, endpoint string) string {
 	api.APIKEY = api.generateSessionID()
 	for k, v := range transactionQuery {
 		api.addParameter(k, v)
@@ -126,7 +128,6 @@ func (api * APICONTEXT) sendRequest(transactionQuery map[string]string,method st
 
 	jsonParameters, err := json.Marshal(api.parameters)
 	mustNot("Error parsing transaction queries: ", err)
-
 
 	req, err := http.NewRequest(method, api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
 	mustNot("Error creating New request: ", err)
