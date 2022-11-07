@@ -209,3 +209,41 @@ func (api *APICONTEXT) TransactionStatus(transactionQuery map[string]string) str
 
 	return string(body)
 }
+
+func (api *APICONTEXT) QueryBeneficiaryName(transactionQuery map[string]string) string {
+	api.APIKEY = api.generateSessionID()
+
+	for k, v := range transactionQuery {
+		api.addParameter(k, v)
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", api.createBearerToken(api.APIKEY))
+	api.addHeader("Authorization", bearer)
+
+	jsonParameters, err := json.Marshal(api.parameters)
+	mustNot("Error parsing query Beneficiary Name queries: ", err)
+
+	endpoint := "queryBeneficiaryName"
+
+	req, err := http.NewRequest("GET", api.getURL(endpoint), bytes.NewBuffer(jsonParameters))
+	mustNot("Error creating New query Beneficiary Name request: ", err)
+
+	for k, v := range api.getHeaders() {
+		req.Header.Set(k, v)
+	}
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	mustNot("Error getting query Beneficiary Name response: ", err)
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	mustNot("Error reading query Beneficiary Name response body: ", err)
+
+	return string(body)
+}
+
+
+
+
+
