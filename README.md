@@ -17,7 +17,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - [x] Query Transaction status
 - [x] Query Beneficiary Name
 - [x] Query Direct Debit
-- [ ] Direct Debit Create
+- [x] Direct Debit Create
 - [ ] Direct Debit Payment
 
 ## Pre-requisites
@@ -341,6 +341,47 @@ func main() {
 
 
     fmt.Println(test.QueryDirectDebit(DirectDebitQuery))
+}
+```
+
+### Direct Debit Create 
+
+```
+package main
+
+import (
+	gopesa "github.com/Golang-Tanzania/GoPesa"
+    "fmt"
+)
+
+func main() {
+
+    // Create a new variable of type gopesa.APICONTEXT
+
+    var test gopesa.APICONTEXT
+
+    // Initialize and set defaults
+
+    test.Initialize("config.json")
+
+    // Create a new map query that maps strings to strings
+
+    DDCQuery := make(map[string]string)
+
+    DDCQuery["input_AgreedTC"] ="1"
+    DDCQuery["input_Country"] ="TZN"
+    DDCQuery["input_CustomerMSISDN"] ="000000000001"
+    DDCQuery["input_EndRangeOfDays"] ="22"
+    DDCQuery["input_ExpiryDate"] ="20161126"
+    DDCQuery["input_FirstPaymentDate"] ="20160324"
+    DDCQuery["input_Frequency"] ="06"
+    DDCQuery["input_ServiceProviderCode"] ="000000"
+    DDCQuery["input_StartRangeOfDays"] ="01"
+    DDCQuery["input_ThirdPartyConversationID"] ="asv02e5958774f7ba228d83d0d689761"
+    DDCQuery["input_ThirdPartyReference"] ="3333"
+
+
+    fmt.Println(test.DirectDebitCreate(DDCQuery))
 }
 ```
 ## Authors
