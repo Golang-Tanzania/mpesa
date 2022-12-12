@@ -1,18 +1,18 @@
 # GoPesa
 
-![GoPesa](./assets/gopesa.svg)
+<img src="./assets/gopesa.svg" alt="GoPesa for Mpesa" height="300px" align="right">
 
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](https://go.dev/)
 [![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/gomods/athens.svg)](https://github.com/Golang-Tanzania/GoPesa)
 [![GoDoc reference example](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/Golang-Tanzania/GoPesa)
 
-Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make your MPESA payments *Ready... To... Gooo!* (*pun intended*). Made with love for gophers.
+Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make your MPESA payments _Ready... To... Gooo!_ (_pun intended_). Made with love for gophers.
 
 ## Features
 
-- [x] Customer to Bussiness (C2B) Single Payment
-- [x] Bussiness to Bussiness (B2B)
-- [x] Bussiness to Customer (B2C)
+- [x] Customer to Business (C2B) Single Payment
+- [x] Business to Business (B2B)
+- [x] Business to Customer (B2C)
 - [x] Payment Reversal
 - [x] Query Transaction status
 - [x] Query Beneficiary Name
@@ -22,18 +22,23 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 
 ## Pre-requisites
 
-- First sign up with [Mpesa](https://openapiportal.m-pesa.com/sign-up) to get your API and PUBLIC keys. You can go through this blog, [Getting Started With Mpesa Developer API](https://dev.to/alphaolomi/getting-started-with-mpesa-developer-portal-46a4) for a more detailed guide.
+- First sign up with [Mpesa](https://openapiportal.m-pesa.com/sign-up) to get your API and PUBLIC keys. 
+
+    You can go through this blog, [Getting Started With Mpesa Developer API](https://dev.to/alphaolomi/getting-started-with-mpesa-developer-portal-46a4) for a more detailed guide.
 
 - Then place your Keys (API and Public key) in a file called `config.json`.
 
 ## Installation
 
 Simply install with the `go get` command:
-```
+
+```sh
 go get github.com/Golang-Tanzania/GoPesa
 ```
+
 Then import it to your main package as:
-```
+
+```go
 package main
 
 import (
@@ -44,13 +49,16 @@ import (
 ## Usage
 
 First create a new variable of type `gopesa.APICONTEXT` and then call the `Initialize` method with the path to your `config.json` as follows:
-```
+
+```go
 var test gopesa.APICONTEXT
 
 test.Initialize("config.json")
 ```
+
 Assuming you want to make a `Customer To Business` transaction, create a new `map` with the required parameters as below:
-```
+
+```go
 // create a new map with a string key and a string value
 
 transactionQuery := make(map[string]string)
@@ -66,8 +74,10 @@ transactionQuery["input_TransactionReference"] = "T12344C"
 transactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
 transactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 ```
+
 Then finally call the Customer To Business method to request a payment:
-```
+
+```go
 fmt.Println(test.C2BPayments(transactionQuery))
 
 // Output
@@ -79,15 +89,18 @@ fmt.Println(test.C2BPayments(transactionQuery))
     "output_ThirdPartyConversationID":"8a89835c71f15e99396"
 }
 ```
+
 And that's it!
 
 ## Setting Environment
 
 You can set your desired environment, ie `Production` or `Sandbox` with the `ENVIRONMENT` keyword:
-```
+
+```go
 var test gopesa.APICONTEXT
 test.ENVIRONMENT = "Production"
 ```
+
 **The default environment is Sandbox**
 
 ## More Examples
@@ -95,7 +108,8 @@ test.ENVIRONMENT = "Production"
 Below are more examples on how to make API transactions.
 
 ### Customer To Business
-```
+
+```go
 package main
 
 import (
@@ -130,8 +144,10 @@ func main() {
 }
 
 ```
+
 ### Business To Customer
-```
+
+```go
 package main
 
 import (
@@ -166,9 +182,10 @@ func main() {
 }
 
 ```
+
 ### Business To Business
 
-```
+```go
 package main
 
 import (
@@ -204,10 +221,9 @@ func main() {
 }
 ```
 
-
 ### Payment Reversal
 
-```
+```go
 package main
 
 import (
@@ -241,7 +257,7 @@ func main() {
 
 ### Query Transaction status
 
-```
+```go
 package main
 
 import (
@@ -274,7 +290,7 @@ func main() {
 
 ### Query Beneficiary Name
 
-```
+```go
 package main
 
 import (
@@ -304,9 +320,10 @@ func main() {
     fmt.Println(test.QueryBeneficiaryName(BeneficiaryNameQuery))
 }
 ```
+
 ### Query Direct Debit
 
-```
+```go
 package main
 
 import (
@@ -344,9 +361,9 @@ func main() {
 }
 ```
 
-### Direct Debit Create 
+### Direct Debit Create
 
-```
+```go
 package main
 
 import (
@@ -384,9 +401,10 @@ func main() {
     fmt.Println(test.DirectDebitCreate(DDCQuery))
 }
 ```
-### Direct Debit Payment 
 
-```
+### Direct Debit Payment
+
+```go
 package main
 
 import (
@@ -421,9 +439,16 @@ func main() {
     fmt.Println(test.DirectDebitPayment(DDPQuery))
 }
 ```
+
 ## Authors
 
-This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz)
+This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz).
+A list of all other contributors can be found [here](https://github.com/Golang-Tanzania/GoPesa/graphs/contributors).
+
+## Contributing
+
+Contributions are welcome. Please open an issue or submit a pull request.
+
 
 ## License
 
