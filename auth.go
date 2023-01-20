@@ -34,7 +34,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"net/http"
 )
 
@@ -50,7 +50,7 @@ type kEYS struct {
 // new keys
 func (api *APICONTEXT) Initialize(file string) *APICONTEXT {
 
-	keys, err := ioutil.ReadFile(file)
+	keys, err := os.ReadFile(file)
 	mustNot("Error reading file: ", err)
 
 	var Keys kEYS
