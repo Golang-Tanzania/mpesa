@@ -103,10 +103,6 @@ func (api *APICONTEXT) addParameter(key, value string) {
 	api.parameters[key] = value
 }
 
-// Get all paramters assigned to APICONTEXT.parameters
-func (api *APICONTEXT) getParameters() map[string]string {
-	return api.parameters
-}
 
 // getPath will determine the endpoints to be used depending on the kind of transaction.
 func (api *APICONTEXT) getPath(url string) string {
