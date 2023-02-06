@@ -140,7 +140,7 @@ func main() {
     c2BtransactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
     c2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 
-    fmt.Println(test2.C2BPayment(c2BtransactionQuery))
+    fmt.Println(test.C2BPayment(c2BtransactionQuery))
 }
 
 ```
