@@ -27,6 +27,13 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
     You can go through this blog, [Getting Started With Mpesa Developer API](https://dev.to/alphaolomi/getting-started-with-mpesa-developer-portal-46a4) for a more detailed guide.
 
 - Then place your Keys (API and Public key) in a file called `config.json`.
+- In this format
+  ```
+  {
+  	"APIKEY":"your api key",
+	"PUBLICKEY":"your public key"
+  }
+  ```
 
 ## Installation
 
