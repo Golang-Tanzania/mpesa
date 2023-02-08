@@ -85,7 +85,7 @@ transactionQuery["input_PurchasedItemsDesc"] = "Shoes"
 Then finally call the Customer To Business method to request a payment:
 
 ```go
-fmt.Println(test.C2BPayments(transactionQuery))
+fmt.Println(test.C2BPayment(transactionQuery))
 
 // Output
 {
