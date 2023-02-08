@@ -30,8 +30,8 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 - In this format
   ```
   {
-  	"APIKEY":"your api key",
-	"PUBLICKEY":"your public key"
+      "APIKEY":"your api key",
+      "PUBLICKEY":"your public key"
   }
   ```
 
