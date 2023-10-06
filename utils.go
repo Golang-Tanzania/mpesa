@@ -29,6 +29,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
 
 // A helper function that will check errors
@@ -103,7 +104,6 @@ func (api *APICONTEXT) addParameter(key, value string) {
 	api.parameters[key] = value
 }
 
-
 // getPath will determine the endpoints to be used depending on the kind of transaction.
 func (api *APICONTEXT) getPath(url string) string {
 	if api.ENVIRONMENT == "production" {
@@ -131,7 +131,9 @@ func (api *APICONTEXT) sendRequest(transactionQuery map[string]string, method st
 	for k, v := range api.getHeaders() {
 		req.Header.Set(k, v)
 	}
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 	mustNot("Error getting response", err)

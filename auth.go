@@ -34,8 +34,9 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
-	"os"
 	"net/http"
+	"os"
+	"time"
 )
 
 // Type kEYS that will receive values from the config.json
@@ -83,7 +84,8 @@ func (api *APICONTEXT) createBearerToken(apiKey string) string {
 	return encryptedKey
 }
 
-//  A method that will generate a new session ID
+//	A method that will generate a new session ID
+//
 // It will return the session ID as a string
 func (api *APICONTEXT) generateSessionID() string {
 	api.setDefault()
@@ -94,7 +96,9 @@ func (api *APICONTEXT) generateSessionID() string {
 	for k, v := range api.getHeaders() {
 		req.Header.Set(k, v)
 	}
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 
 	resp, err := client.Do(req)
 
