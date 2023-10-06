@@ -29,6 +29,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -139,9 +140,10 @@ func (api *APICONTEXT) sendRequest(transactionQuery map[string]string, method st
 	mustNot("Error getting response", err)
 
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
+	sb := strings.Builder{}
+	_, err = io.Copy(&sb, resp.Body)
 	mustNot("Error reading response body: ", err)
 
-	return string(body)
+	return sb.String()
 
 }

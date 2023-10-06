@@ -36,6 +36,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -101,20 +102,19 @@ func (api *APICONTEXT) generateSessionID() string {
 	}
 
 	resp, err := client.Do(req)
-
 	mustNot("Error requesting Session ID: ", err)
-
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
 
+	sb := strings.Builder{}
+	_, err = io.Copy(&sb, resp.Body)
 	mustNot("Error reading response body: ", err)
 
 	var result map[string]string
-	json.Unmarshal([]byte(body), &result)
+	json.Unmarshal([]byte(sb.String()), &result)
 
 	if result["output_SessionID"] != "" {
 		return result["output_SessionID"]
 	} else {
-		return string(body)
+		return sb.String()
 	}
 }
