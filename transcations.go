@@ -56,6 +56,7 @@ func (api *APICONTEXT) ReversePayment(transactionQuery map[string]string) string
 // It accepts transaction queries as a parameter.
 // It returns the http response as a string.
 func (api *APICONTEXT) TransactionStatus(transactionQuery map[string]string) string {
+	//TODO needs to pass query in URL params, not request body
 	return api.sendRequest(transactionQuery, http.MethodGet, "queryTransactionStatus")
 }
 
