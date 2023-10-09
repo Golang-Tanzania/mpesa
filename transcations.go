@@ -61,6 +61,7 @@ func (api *APICONTEXT) TransactionStatus(transactionQuery map[string]string) str
 }
 
 func (api *APICONTEXT) QueryBeneficiaryName(transactionQuery map[string]string) string {
+	//TODO needs to pass query in URL params, not request body
 	return api.sendRequest(transactionQuery, http.MethodGet, "queryBeneficiaryName")
 }
 
