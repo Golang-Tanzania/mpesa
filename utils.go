@@ -29,6 +29,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -38,6 +39,24 @@ func mustNot(message string, err error) {
 	if err != nil {
 		log.Println(message, err)
 	}
+}
+
+// converts any struct to map[string]interface{}
+func changeToMapString(input interface{}) map[string]any {
+	result := make(map[string]any)
+
+	// Use reflection to inspect the input
+	value := reflect.ValueOf(input)
+	typeOf := value.Type()
+
+	// Iterate over the fields of the struct
+	for i := 0; i < value.NumField(); i++ {
+		fieldName := typeOf.Field(i).Name
+		fieldValue := value.Field(i).Interface()
+		result[fieldName] = fieldValue
+	}
+
+	return result
 }
 
 // Type APICONTEXT that stores the API's configurable info
