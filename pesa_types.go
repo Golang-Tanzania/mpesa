@@ -22,16 +22,18 @@ SOFTWARE.
 
 package gopesa
 
+import "math/big"
+
 // GenericPayRequest can be used to create C2B, B2C or B2B transaction
 type GenericPayRequest struct {
-	Amount                   string `json:"input_Amount"`                   // the transaction amount.
-	Country                  string `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
-	Currency                 string `json:"input_Currency"`                 // currency for the transaction. 3-letter code
-	CustomerMSISDN           string `json:"input_CustomerMSISDN"`           // MSISDN of the customer
-	ServiceProviderCode      string `json:"input_ServiceProviderCode"`      // shortcode of the organization where funds will be credited to
-	ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"` // third party's transaction reference on their system.
-	TransactionReference     string `json:"input_TransactionReference"`     // customer's transaction reference
-	PurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`       // summary description of purchased items
+	Amount                   big.Rat `json:"input_Amount"`                   // the transaction amount. e.g. 100.00 or 25.50
+	Country                  string  `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
+	Currency                 string  `json:"input_Currency"`                 // currency for the transaction. 3-letter code
+	CustomerMSISDN           uint64  `json:"input_CustomerMSISDN"`           // MSISDN of the customer
+	ServiceProviderCode      string  `json:"input_ServiceProviderCode"`      // shortcode of the organization where funds will be credited to
+	ThirdPartyConversationID string  `json:"input_ThirdPartyConversationID"` // third party's transaction reference on their system.
+	TransactionReference     string  `json:"input_TransactionReference"`     // customer's transaction reference
+	PurchasedItemsDesc       string  `json:"input_PurchasedItemsDesc"`       // summary description of purchased items
 }
 
 // GenericPayResponse is returned upon C2B, B2C or B2B transaction
@@ -44,11 +46,11 @@ type GenericPayResponse struct {
 }
 
 type ReversalRequest struct {
-	Country                  string `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
-	ReversalAmount           string `json:"input_ReversalAmount"`           // transaction amount that needs to be reversed. If full amount, can be omitted
-	ServiceProviderCode      string `json:"input_ServiceProviderCode"`      //The shortcode of the org where funds will be credited to.
-	ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"` // third party's transaction reference on their system.
-	TransactionID            string `json:"input_TransactionID"`            //The unique ID of the transaction needed to be reversed.
+	Country                  string  `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
+	ReversalAmount           big.Rat `json:"input_ReversalAmount"`           // transaction amount that needs to be reversed. If full amount, can be omitted
+	ServiceProviderCode      string  `json:"input_ServiceProviderCode"`      //The shortcode of the org where funds will be credited to.
+	ThirdPartyConversationID string  `json:"input_ThirdPartyConversationID"` // third party's transaction reference on their system.
+	TransactionID            string  `json:"input_TransactionID"`            //The unique ID of the transaction needed to be reversed.
 }
 
 type TransactionStatusReq struct {
@@ -56,4 +58,71 @@ type TransactionStatusReq struct {
 	QueryReference           string `json:"input_QueryReference"`           //The transaction's ID being queried
 	ServiceProviderCode      string `json:"input_ServiceProviderCode"`      //The shortcode of the organization.
 	ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"` //The third party's transaction reference on their system.
+}
+
+type DebitQueryRequest struct {
+	QueryBalanceAmount       bool    `json:"input_QueryBalanceAmount"`       //check against the customer's balance. If true, set BalanceAmount
+	BalanceAmount            big.Rat `json:"input_BalanceAmount"`            //The amount to query against the customer's balance
+	Country                  string  `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
+	CustomerMSISDN           uint64  `json:"input_CustomerMSISDN"`           // MSISDN of the customer
+	MsisdnToken              string  `json:"input_MsisdnToken"`              //The previously returned encrypted MSISDN of the customer
+	ServiceProviderCode      string  `json:"input_ServiceProviderCode"`      //The shortcode of the organization where funds will be credited to.
+	ThirdPartyConversationID string  `json:"input_ThirdPartyConversationID"` // third party's transaction reference on their system.
+	ThirdPartyReference      string  `json:"input_ThirdPartyReference"`      //The direct debit's mandate reference
+	MandateID                uint32  `json:"input_MandateID"`                //Mandate ID for the Mandate as recorded on the MPesa Platform.
+	Currency                 string  `json:"input_Currency"`                 // currency for the transaction. 3-letter code
+}
+
+type DebitQueryResponse struct {
+	ResponseCode             string `json:"output_ResponseCode"`             //The result code for the transaction.
+	ResponseDesc             string `json:"output_ResponseDesc"`             //The result description for the transaction.
+	TransactionReference     string `json:"output_TransactionReference"`     // customer's transaction reference
+	ConversationID           string `json:"output_ConversationID"`           //reference to the transaction generated by OpenAPI platform
+	ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"` //The incoming reference from the third party system
+	SufficientBalance        bool   `json:"output_SufficientBalance"`        //whether customer account has sufficient balance to perform Direct Debit Payment.
+	MsisdnToken              string `json:"output_MsisdnToken"`              //The encrypted MSISDN Token, returned on success
+	MandateID                string `json:"output_MandateID"`                //Mandate ID for the Mandate as recorded on the M-Pesa Platform.
+	MandateStatus            string `json:"output_MandateStatus"`            //Return status of the mandate
+	AccountStatus            string `json:"output_AccountStatus"`            // Return the customers M-Pesa account status
+	FirstPaymentDate         string `json:"output_FirstPaymentDate"`         //The Start date of the Mandate.
+	Frequency                string `json:"output_Frequency"`                //The frequency of the payments
+	PaymentDayFrom           string `json:"output_PaymentDayFrom"`           //The start range of days in the month.
+	PaymentDayTo             string `json:"output_PaymentDayTo"`             //The end range of days in the month.
+	ExpiryDate               string `json:"output_ExpiryDate"`               //The expiry date of the Mandate.
+}
+
+type DebitDebitRequest struct {
+	AgreedTC                 uint8  `json:"input_AgreedTC"`                 //Whether customer agreed to the terms and conditions. Valid values 1 or 0
+	Country                  string `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
+	CustomerMSISDN           uint64 `json:"input_CustomerMSISDN"`           // MSISDN of the customer
+	EndRangeOfDays           uint8  `json:"input_EndRangeOfDays"`           //The end range of days in the month. e.g. 22
+	StartRangeOfDays         uint8  `json:"input_StartRangeOfDays"`         //The start range of days in the month. e.g. 02
+	ExpiryDate               uint32 `json:"input_ExpiryDate"`               //The expiry date of the Mandate. example: 20230205
+	FirstPaymentDate         uint32 `json:"input_FirstPaymentDate"`         //The Start date of the Mandate. example: 20230410
+	Frequency                uint32 `json:"input_Frequency"`                //The frequency of the payments
+	ServiceProviderCode      string `json:"input_ServiceProviderCode"`      //The shortcode of the organization where funds will be credited to.
+	ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"` //The incoming reference from the third party system
+	ThirdPartyReference      string `json:"input_ThirdPartyReference"`      //The direct debit's mandate reference
+}
+
+// GenericDebitResponse returned upon DirectDebitCreate or DirectDebitPayment
+type GenericDebitResponse struct {
+	ResponseCode             string `json:"output_ResponseCode"`             //The result code for the transaction.
+	ResponseDesc             string `json:"output_ResponseDesc"`             //The result description for the transaction.
+	TransactionReference     string `json:"output_TransactionReference"`     // customer's transaction reference
+	MsisdnToken              string `json:"output_MsisdnToken"`              //The encrypted MSISDN Token, returned on success
+	ConversationID           string `json:"output_ConversationID"`           //reference to the transaction generated by OpenAPI platform
+	ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"` //The incoming reference from the third party system
+	MandateID                string `json:"output_MandateID"`                //Mandate ID for the Mandate as recorded on the M-Pesa Platform.
+}
+
+type DebitPaymentRequest struct {
+	Amount                   big.Rat `json:"input_Amount"`                   // the transaction amount. e.g. 100.00 or 25.50
+	Country                  string  `json:"input_Country"`                  // country in which the transaction happens. 3-letter code
+	Currency                 string  `json:"input_Currency"`                 // currency for the transaction. 3-letter code
+	CustomerMSISDN           uint64  `json:"input_CustomerMSISDN"`           // MSISDN of the customer
+	ServiceProviderCode      string  `json:"input_ServiceProviderCode"`      // The shortcode of the organization where funds will be credited to.
+	ThirdPartyConversationID string  `json:"input_ThirdPartyConversationID"` // The incoming reference from the third party system
+	MandateID                string  `json:"input_MandateID"`                // Mandate ID for the Mandate as recorded on the M-Pesa Platform.
+	ThirdPartyReference      string  `json:"input_ThirdPartyReference"`      // customer's transaction reference
 }
