@@ -31,6 +31,20 @@ func (api *APICONTEXT) C2BPayment(transactionQuery map[string]string) string {
 	return api.sendRequest(transactionQuery, http.MethodPost, "c2bPayment/singleStage")
 }
 
+/*
+// EXAMPLE WITH SOLID TYPES
+func (api *APICONTEXT) C2BPayment(transactionQuery GenericPayRequest) (GenericPayResponse, error) {
+	var response GenericPayResponse
+	//bb is byte[]
+	bb, err := api.sendRequest(transactionQuery, http.MethodPost, "c2bPayment/singleStage")
+	if err != nil {
+		return GenericPayResponse{}, err
+	}
+	err = json.Unmarshal(bb, &response)
+	return response, err
+}
+*/
+
 // A method to conduct Business to Customer transactions.
 // It accepts transaction queries as a parameter.
 // It returns the http response as a string.
@@ -56,17 +70,18 @@ func (api *APICONTEXT) ReversePayment(transactionQuery map[string]string) string
 // It accepts transaction queries as a parameter.
 // It returns the http response as a string.
 func (api *APICONTEXT) TransactionStatus(transactionQuery map[string]string) string {
-	//TODO needs to pass query in URL params, not request body
+	//FIXME needs to pass query in URL params, not request body
 	return api.sendRequest(transactionQuery, http.MethodGet, "queryTransactionStatus")
 }
 
 func (api *APICONTEXT) QueryBeneficiaryName(transactionQuery map[string]string) string {
-	//TODO needs to pass query in URL params, not request body
+	//FIXME needs to pass query in URL params, not request body
 	return api.sendRequest(transactionQuery, http.MethodGet, "queryBeneficiaryName")
 }
 
 func (api *APICONTEXT) QueryDirectDebit(transactionQuery map[string]string) string {
-	return api.sendRequest(transactionQuery, http.MethodPost, "queryDirectDebit")
+	//FIXME needs to pass query in URL params, not request body
+	return api.sendRequest(transactionQuery, http.MethodGet, "queryDirectDebit")
 }
 
 func (api *APICONTEXT) DirectDebitCreate(transactionQuery map[string]string) string {
