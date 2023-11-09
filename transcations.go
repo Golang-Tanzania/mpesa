@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package gopesa
+package mpesa
 
 // A method to conduct Customer to Business transactions.
 // It accepts transaction queries as a parameter.

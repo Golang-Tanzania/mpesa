@@ -1,10 +1,10 @@
-# GoPesa
+# Mpesa
 
-<img src="./assets/gopesa.svg" alt="GoPesa for Mpesa" height="300px" align="right">
+<img src="./assets/mpesa.svg" alt="Mpesa for Mpesa" height="300px" align="right">
 
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](https://go.dev/)
-[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/gomods/athens.svg)](https://github.com/Golang-Tanzania/GoPesa)
-[![GoDoc reference example](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/Golang-Tanzania/GoPesa)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/gomods/athens.svg)](https://github.com/Golang-Tanzania/Mpesa)
+[![GoDoc reference example](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/Golang-Tanzania/mpesa)
 
 Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make your MPESA payments _Ready... To... Gooo!_ (_pun intended_). Made with love for gophers.
 
@@ -40,7 +40,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 Simply install with the `go get` command:
 
 ```sh
-go get github.com/Golang-Tanzania/GoPesa
+go get github.com/Golang-Tanzania/mpesa
 ```
 
 Then import it to your main package as:
@@ -49,16 +49,16 @@ Then import it to your main package as:
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
 )
 ```
 
 ## Usage
 
-First create a new variable of type `gopesa.APICONTEXT` and then call the `Initialize` method with the path to your `config.json` as follows:
+First create a new variable of type `mpesa.APICONTEXT` and then call the `Initialize` method with the path to your `config.json` as follows:
 
 ```go
-var test gopesa.APICONTEXT
+var test mpesa.APICONTEXT
 
 test.Initialize("config.json")
 ```
@@ -104,7 +104,7 @@ And that's it!
 You can set your desired environment, ie `Production` or `Sandbox` with the `ENVIRONMENT` keyword:
 
 ```go
-var test gopesa.APICONTEXT
+var test mpesa.APICONTEXT
 test.ENVIRONMENT = "Production"
 ```
 
@@ -120,15 +120,15 @@ Below are more examples on how to make API transactions.
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -158,15 +158,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa@v0.1.2"
+	mpesa "github.com/Golang-Tanzania/mpesa@v0.1.2"
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -196,15 +196,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -234,15 +234,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -268,15 +268,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -301,15 +301,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -334,15 +334,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -374,15 +374,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -415,15 +415,15 @@ func main() {
 package main
 
 import (
-	gopesa "github.com/Golang-Tanzania/GoPesa"
+	mpesa "github.com/Golang-Tanzania/mpesa
     "fmt"
 )
 
 func main() {
 
-    // Create a new variable of type gopesa.APICONTEXT
+    // Create a new variable of type mpesa.APICONTEXT
 
-    var test gopesa.APICONTEXT
+    var test mpesa.APICONTEXT
 
     // Initialize and set defaults
 
@@ -450,7 +450,7 @@ func main() {
 ## Authors
 
 This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz).
-A list of all other contributors can be found [here](https://github.com/Golang-Tanzania/GoPesa/graphs/contributors).
+A list of all other contributors can be found [here](https://github.com/Golang-Tanzania/mpesa/graphs/contributors).
 
 ## Contributing
 

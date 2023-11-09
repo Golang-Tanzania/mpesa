@@ -23,7 +23,7 @@ SOFTWARE.
 // Golang bindings for the
 // Mpesa Payment API (see https://openapiportal.m-pesa.com),
 // to easily make your MPESA payments ready to GO.
-package gopesa
+package mpesa
 
 import (
 	"crypto/rand"

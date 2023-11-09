@@ -1,3 +1,3 @@
-module github.com/Golang-Tanzania/GoPesa
+module github.com/Golang-Tanzania/mpesa
 
-go 1.18
+go 1.21.0
