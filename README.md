@@ -22,18 +22,33 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 
 ## Pre-requisites
 
-- First sign up with [Mpesa](https://openapiportal.m-pesa.com/sign-up) to get your API and PUBLIC keys. 
+- First sign up with [Mpesa](https://openapiportal.m-pesa.com/sign-up) to get your API Key and PUBLIC key. 
 
     You can go through this blog, [Getting Started With Mpesa Developer API](https://dev.to/alphaolomi/getting-started-with-mpesa-developer-portal-46a4) for a more detailed guide.
 
-- Then place your Keys (API and Public key) in a file called `config.json`.
-- In this format
-  ```
+- API key and Public key can be put in a file the following extensions `json, yaml, .env`
+
+Supported extensions
+
+json
+ ```
   {
-      "APIKEY":"your api key",
-      "PUBLICKEY":"your public key"
+      "api_key":"your-api-key",
+      "public_key":"your-public-key"
   }
   ```
+
+yaml
+```yaml
+api_key: your-api-key
+public_key: your public key
+```
+.env
+```
+api_key=your-api-key
+public_key=your-public-key
+
+```
 
 ## Installation
 
@@ -53,66 +68,20 @@ import (
 )
 ```
 
-## Usage
+## Load keys
 
-First create a new variable of type `mpesa.APICONTEXT` and then call the `Initialize` method with the path to your `config.json` as follows:
-
-```go
-var test mpesa.APICONTEXT
-
-test.Initialize("config.json")
-```
-
-Assuming you want to make a `Customer To Business` transaction, create a new `map` with the required parameters as below:
+First create a new variable of type `mpesa.Client` and then load the configs that we put on config dir, in it there is config.json file
 
 ```go
-// create a new map with a string key and a string value
+var client mpesa.Client
 
-transactionQuery := make(map[string]string)
-
-// map each transaction query key to its value
-
-transactionQuery["input_Amount"] = "10"
-transactionQuery["input_CustomerMSISDN"] = "000000000001"
-transactionQuery["input_Country"] = "TZN"
-transactionQuery["input_Currency"] = "TZS"
-transactionQuery["input_ServiceProviderCode"] = "000000"
-transactionQuery["input_TransactionReference"] = "T12344C"
-transactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-transactionQuery["input_PurchasedItemsDesc"] = "Shoes"
+client.LoadKeys("path to dir", "file", "file extension(json,yaml,.env)", environment(mpesa.Sandbox/mpesa.Production))
+client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 ```
 
-Then finally call the Customer To Business method to request a payment:
+## Examples
 
-```go
-fmt.Println(test.C2BPayment(transactionQuery))
-
-// Output
-{
-    "output_ResponseCode":"INS-0",
-    "output_ResponseDesc":"Request processed successfully"
-    "output_TransactionID":"cUmNsY2j0Fr5",
-    "output_ConversationID":"8cba707babcf4b36921f9ff1bd957cb1",
-    "output_ThirdPartyConversationID":"8a89835c71f15e99396"
-}
-```
-
-And that's it!
-
-## Setting Environment
-
-You can set your desired environment, ie `Production` or `Sandbox` with the `ENVIRONMENT` keyword:
-
-```go
-var test mpesa.APICONTEXT
-test.ENVIRONMENT = "Production"
-```
-
-**The default environment is Sandbox**
-
-## More Examples
-
-Below are more examples on how to make API transactions.
+Below are examples on how to make different transactions.
 
 ### Customer To Business
 
@@ -120,36 +89,42 @@ Below are more examples on how to make API transactions.
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
+	a := mpesa.C2BPaymentRequest{
+		InputAmount:                   "100",
+		InputCustomerMSISDN:           "000000000001",
+		InputCountry:                  "TZN",
+		InputCurrency:                 "TZS",
+		InputServiceProviderCode:      "000000",
+		InputTransactionReference:     "T12344C",
+		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		InputPurchasedItemsDesc:       "Test",
+	}
+	res, err := client.C2BPayment(context.Background(), a)
 
-    test.Initialize("config.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    // Create a new map query that maps strings to strings
-
-    c2BtransactionQuery := make(map[string]string)
-
-    c2BtransactionQuery["input_Amount"] = "10"
-    c2BtransactionQuery["input_CustomerMSISDN"] = "000000000001"
-    c2BtransactionQuery["input_Country"] = "TZN"
-    c2BtransactionQuery["input_Currency"] = "TZS"
-    c2BtransactionQuery["input_ServiceProviderCode"] = "000000"
-    c2BtransactionQuery["input_TransactionReference"] = "T12344C"
-    c2BtransactionQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-    c2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
-
-    fmt.Println(test.C2BPayment(c2BtransactionQuery))
+	fmt.Println("res", res)
 }
-
 ```
 
 ### Business To Customer
@@ -158,34 +133,44 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa@v0.1.2"
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
 
-    test.Initialize("config.json")
+	c := mpesa.B2CPaymentRequest{
+		InputAmount:                   "100",
+		InputCustomerMSISDN:           "000000000001",
+		InputCountry:                  "TZN",
+		InputCurrency:                 "TZS",
+		InputServiceProviderCode:      "000000",
+		InputTransactionReference:     "T12344C",
+		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		InputPaymentItemsDesc:       "Test",
+	}
 
-    // Create a new map query that maps strings to strings
+	res, err := client.B2CPayment(context.Background(), c)
 
-    b2CtransactionQuery := make(map[string]string)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    b2CtransactionQuery["input_Amount"] = "250"
-    b2CtransactionQuery["input_Country"] = "TZN"
-    b2CtransactionQuery["input_Currency"] = "TZS"
-    b2CtransactionQuery["input_CustomerMSISDN"] = "000000000001"
-    b2CtransactionQuery["input_ServiceProviderCode"] = "000000"
-    b2CtransactionQuery["input_ThirdPartyConversationID"] = "f5e420e99594a9c496d8600"
-    b2CtransactionQuery["input_TransactionReference"] = "T12345C"
-    b2CtransactionQuery["input_PaymentItemsDesc"] = "Donation"
+	fmt.Println("res", res)
 
-    fmt.Println(test.B2CPayment(b2CtransactionQuery))
 }
 
 ```
@@ -196,35 +181,42 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
+	b := mpesa.B2BPaymentRequest{
+		InputAmount:            "100",
+		InputCountry:           "TZN",
+		InputCurrency:          "TZS",
+		InputPrimaryPartyCode: "000000",
+		InputReceiverPartyCode: "000001",
+		InputThirdPartyConversationID: "8a89835c71f15e99396",
+		InputTransactionReference: "T12344C",
+		InputPurchasedItemsDesc: "Test",
+	}
 
-    test.Initialize("config.json")
+	res, err := client.B2BPayment(context.Background(), b)
 
-    // Create a new map query that maps strings to strings
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    b2BtransactionQuery := make(map[string]string)
-
-    b2BtransactionQuery["input_Amount"] = "10"
-    b2BtransactionQuery["input_Country"] = "TZN"
-    b2BtransactionQuery["input_Currency"] = "TZS"
-    b2BtransactionQuery["input_PrimaryPartyCode"] = "000000"
-    b2BtransactionQuery["input_ReceiverPartyCode"] = "000001"
-    b2BtransactionQuery["input_ServiceProviderCode"] = "000000"
-    b2BtransactionQuery["input_ThirdPartyConversationID"] = "8a89835c71f15e99396"
-    b2BtransactionQuery["input_TransactionReference"] = "T1234C"
-    b2BtransactionQuery["input_PurchasedItemsDesc"] = "Shoes"
-
-    fmt.Println(test.B2BPayment(b2BtransactionQuery))
+	fmt.Println("res", res)
 }
 ```
 
@@ -234,31 +226,39 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
+	d :=  mpesa.ReversalRequest{
+		InputTransactionID: "0000000000001",
+		InputCountry: "TZN",
+		InputServiceProviderCode: "000000",
+		InputReversalAmount: "100",
+		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+	}
 
-    test.Initialize("config.json")
+	res, err := client.Reversal(context.Background(), d)
 
-    // Create a new map query that maps strings to strings
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    paymentReversaltranscQuery := make(map[string]string)
-
-    paymentReversaltranscQuery["input_ReversalAmount"] = "25"
-    paymentReversaltranscQuery["input_Country"] = "TZN"
-    paymentReversaltranscQuery["input_ServiceProviderCode"] = "000000"
-    paymentReversaltranscQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-    paymentReversaltranscQuery["input_TransactionID"] = "0000000000001"
-
-    fmt.Println(test.ReversePayment(paymentReversaltranscQuery))
+	fmt.Println("res", res)
 }
 ```
 
@@ -268,30 +268,38 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
+	e := mpesa.QueryTxStatusRequest{
+		InputQueryReference:           "000000000000000000001",
+		InputCountry:                  "TZN",
+		InputServiceProviderCode:      "000000",
+		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+	}
 
-    test.Initialize("config.json")
+	res, err := client.QueryTxStatus(context.Background(), e)
 
-    // Create a new map query that maps strings to strings
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    transanctionStatusQuery := make(map[string]string)
-
-    transanctionStatusQuery["input_QueryReference"] = "000000000000000000001"
-    transanctionStatusQuery["input_ServiceProviderCode"] = "000000"
-    transanctionStatusQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-    transanctionStatusQuery["input_Country"] = "TZN"
-
-    fmt.Println(test.TransactionStatus(transanctionStatusQuery))
+	fmt.Println("res", res)
 }
 ```
 
@@ -301,70 +309,66 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
-    // Initialize and set defaults
+	h := mpesa.QueryBenRequest{
+		InputCountry:                  "TZN",
+		InputServiceProviderCode:      "000000",
+		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		InputCustomerMSISDN:           "000000000001",
+		InputKycQueryType:             "Name",
+	}
 
-    test.Initialize("config.json")
+	res, err := client.QueryBeneficiaryName(context.Background(), h)
 
-    // Create a new map query that maps strings to strings
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    BeneficiaryNameQuery := make(map[string]string)
-
-    BeneficiaryNameQuery["input_CustomerMSISDN"] = "255742051622"
-    BeneficiaryNameQuery["input_ServiceProviderCode"] = "000000"
-    BeneficiaryNameQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-    BeneficiaryNameQuery["input_Country"] = "TZN"
-    BeneficiaryNameQuery["input_KycQueryType"] = "Name"
-    fmt.Println(test.QueryBeneficiaryName(BeneficiaryNameQuery))
+	fmt.Println("res", res)
 }
 ```
 
 ### Query Direct Debit
 
 ```go
-package main
 
-import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
-)
+	i := mpesa.QueryDirectDBReq{
+		InputQueryBalanceAmount:       true,
+		InputBalanceAmount:            "100",
+		InputCountry:                  "TZN",
+		InputCustomerMSISDN:           "255744553111",
+		InputMsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
+		InputServiceProviderCode:      "112244",
+		InputThirdPartyConversationID: "GPO3051656128",
+		InputThirdPartyReference:      "Test123",
+		InputMandateID:                "15045",
+		InputCurrency:                 "TZS",
+	}
 
-func main() {
+	res, err := client.QueryDirectDebit(context.Background(), i)
 
-    // Create a new variable of type mpesa.APICONTEXT
+	if err != nil {
+		fmt.Println(err)
+	}
 
-    var test mpesa.APICONTEXT
-
-    // Initialize and set defaults
-
-    test.Initialize("config.json")
-
-    // Create a new map query that maps strings to strings
-
-    DirectDebitQuery := make(map[string]string)
-
-    DirectDebitQuery["input_QueryBalanceAmount"] = "True"
-    DirectDebitQuery["input_BalanceAmount"] = "100"
-    DirectDebitQuery["input_Country"] = "TZN"
-    DirectDebitQuery["input_CustomerMSISDN"] = "255744553111"
-    DirectDebitQuery["input_MsisdnToken"] = "cvgwUBZ3lAO9ivwhWAFeng=="
-    DirectDebitQuery["input_ServiceProviderCode"] = "112244"
-    DirectDebitQuery["input_ThirdPartyConversationID"] = "GPO3051656128"
-    DirectDebitQuery["input_ThirdPartyReference"] = "Test123"
-    DirectDebitQuery["input_MandateID"] = "15045"
-    DirectDebitQuery["input_Currency"] = "TZS"
-
-
-    fmt.Println(test.QueryDirectDebit(DirectDebitQuery))
+	fmt.Println("res", res)
 }
 ```
 
@@ -374,38 +378,46 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
-
-    // Initialize and set defaults
-
-    test.Initialize("config.json")
-
-    // Create a new map query that maps strings to strings
-
-    DDCQuery := make(map[string]string)
-
-    DDCQuery["input_AgreedTC"] ="1"
-    DDCQuery["input_Country"] ="TZN"
-    DDCQuery["input_CustomerMSISDN"] ="000000000001"
-    DDCQuery["input_EndRangeOfDays"] ="22"
-    DDCQuery["input_ExpiryDate"] ="20161126"
-    DDCQuery["input_FirstPaymentDate"] ="20160324"
-    DDCQuery["input_Frequency"] ="06"
-    DDCQuery["input_ServiceProviderCode"] ="000000"
-    DDCQuery["input_StartRangeOfDays"] ="01"
-    DDCQuery["input_ThirdPartyConversationID"] ="asv02e5958774f7ba228d83d0d689761"
-    DDCQuery["input_ThirdPartyReference"] ="3333"
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
 
-    fmt.Println(test.DirectDebitCreate(DDCQuery))
+	f := mpesa.DirectDBCreateReq{
+		InputCustomerMSISDN:         "000000000001",
+		InputCountry:                "TZN",
+		InputServiceProviderCode:    "000000",
+		InputThirdPartyReference:    "3333",
+		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		InputAgreedTC:               "1",
+		InputFirstPaymentDate:       "20160324",
+		InputFrequency:              "06",
+		InputStartRangeOfDays:       "01",
+		InputEndRangeOfDays:         "22",
+		InputExpiryDate:             "20161126",
+	}
+
+	res, err := client.DirectDebitCreate(context.Background(), f)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("res", res)
 }
 ```
 
@@ -415,36 +427,92 @@ func main() {
 package main
 
 import (
-	mpesa "github.com/Golang-Tanzania/mpesa
-    "fmt"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
 )
 
 func main() {
+	var client mpesa.Client
 
-    // Create a new variable of type mpesa.APICONTEXT
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
 
-    var test mpesa.APICONTEXT
-
-    // Initialize and set defaults
-
-    test.Initialize("config.json")
-
-    // Create a new map query that maps strings to strings
-
-    DDPQuery := make(map[string]string)
-
-    DDPQuery["input_Amount"] = "10"
-    DDPQuery["input_Country"] = "TZN"
-    DDPQuery["input_Currency"] = "TZS"
-    DDPQuery["input_CustomerMSISDN"] = "000000000001"
-    DDPQuery["input_ServiceProviderCode"] = "000000"
-    DDPQuery["input_ThirdPartyConversationID"] = "asv02e5958774f7ba228d83d0d689761"
-    DDPQuery["input_ThirdPartyReference"] = "5db410b459bd433ca8e5"
-    DDPQuery["input_MandateID"] = "15045"
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
 
 
-    fmt.Println(test.DirectDebitPayment(DDPQuery))
+
+	g := mpesa.DebitDBPaymentReq{
+		InputMsisdnToken:              "AbCd123=",
+		InputCustomerMSISDN:           "000000000001",
+		InputCountry:                  "TZN",
+		InputServiceProviderCode:      "000000",
+		InputThirdPartyReference:      "5db410b459bd433ca8e5",
+		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		InputAmount:                   "10",
+		InputCurrency:                 "TZS",
+		InputMandateID:                "15045",
+	}
+
+	res, err := client.DirectDebitPayment(context.Background(), g)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("res", res)
 }
+```
+
+### Cancel Direct Debit 
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
+)
+
+func main() {
+	var client mpesa.Client
+
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
+
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
+
+
+
+	j := mpesa.CancelDirectDBReq{
+		InputMsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
+		InputCustomerMSISDN:           "000000000001",
+		InputCountry:                  "TZN",
+		InputServiceProviderCode:      "000000",
+		InputThirdPartyReference:      "00000000000000000001",
+		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		InputMandateID:                "15045",
+	}
+
+	res, err := client.CancelDirectDebit(context.Background(), j)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("res", res)
+}
+
 ```
 
 ## Authors
