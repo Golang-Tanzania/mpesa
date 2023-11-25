@@ -5,20 +5,21 @@ import (
 )
 
 const (
-	Address           = "openapi.m-pesa.com"
-	Ssl               = true
-	Port              = 443
-	Sandbox           = "sandbox"
-	ProdEndpoint      = "/openapi/ipg/v2/vodacomTZN/"
-	SandboxEndpoint   = "/sandbox/ipg/v2/vodacomTZN/"
-	SessionEndPath    = "getSession"
-	C2BPaymentPath    = "c2bPayment/singleStage"
-	B2BPaymentPath    = "b2bPayment"
-	B2CPaymentPath    = "b2cPayment"
-	ReversalPath      = "reversal"
-	QueryTxStatusPath = "queryTransactionStatus"
-	DirectDebitPath   = "directDebitCreation"
-	DebitDBPaymentPath    = "directDebitPayment"
+	Address             = "openapi.m-pesa.com"
+	Ssl                 = true
+	Port                = 443
+	Sandbox             = "sandbox"
+	ProdEndpoint        = "/openapi/ipg/v2/vodacomTZN/"
+	SandboxEndpoint     = "/sandbox/ipg/v2/vodacomTZN/"
+	SessionEndPath      = "getSession"
+	C2BPaymentPath      = "c2bPayment/singleStage"
+	B2BPaymentPath      = "b2bPayment"
+	B2CPaymentPath      = "b2cPayment"
+	ReversalPath        = "reversal"
+	QueryTxStatusPath   = "queryTransactionStatus"
+	DirectDebitPath     = "directDebitCreation"
+	DebitDBPaymentPath  = "directDebitPayment"
+	QueryBeneficialPath = "queryBeneficiaryName"
 )
 
 type (
@@ -169,5 +170,22 @@ type (
 		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
 		OutputConversationID           string `json:"output_ConversationID"`
 		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID,omitempty"`
+	}
+
+	QueryBenRequest struct {
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		InputCountry                  string `json:"input_Country"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputKycQueryType             string `json:"input_KycQueryType"`
+	}
+
+	QueryBenResponse struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputCustomerFirstName        string `json:"output_CustomerFirstName"`
+		OutputCustomerLastName         string `json:"output_CustomerLastName"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 )
