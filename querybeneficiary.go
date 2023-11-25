@@ -6,7 +6,7 @@ import (
 
 func (c *Client) QueryBeneficiaryName(ctx context.Context, payload QueryBenRequest) (*QueryBenResponse, error) {
 
-	req, err := c.NewRequest(ctx, "GET", c.makeUrl(QueryBeneficialPath), payload)
+	req, err := c.NewReqWithQueryParams(ctx, "GET", c.makeUrl(QueryBeneficialPath), payload)
 	if err != nil {
 		return nil, err
 	}
