@@ -73,7 +73,7 @@ func (c *Client) makeUrl(endpoint string) string {
 	return url
 }
 
-func (c *Client) genSessionId() (*SessionIDResponse, error) {
+func (c *Client) genSessionKey() (*SessionKeyResponse, error) {
 
 	req, err := http.NewRequest("GET", c.makeUrl(SessionEndPath), nil)
 
@@ -81,7 +81,7 @@ func (c *Client) genSessionId() (*SessionIDResponse, error) {
 		return nil, err
 	}
 
-	var res *SessionIDResponse
+	var res *SessionKeyResponse
 
 	err = c.SendWithAuth(req, &res, nil)
 
@@ -169,10 +169,9 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) e
 	return c.Send(req, v, e)
 }
 
-
 func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interface{}) error {
 
-	sessionkey, err := c.genSessionId()
+	sessionkey, err := c.genSessionKey()
 
 	if err != nil {
 		return err
@@ -190,7 +189,6 @@ func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interfac
 
 	return c.Send(req, v, e)
 }
-
 
 func (c *Client) NewRequest(ctx context.Context, method, url string, payload interface{}) (*http.Request, error) {
 	var buf io.Reader

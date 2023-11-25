@@ -27,7 +27,7 @@ type (
 		ApiKey    string
 	}
 
-	SessionIDResponse struct {
+	SessionKeyResponse struct {
 		OutputResponseCode string `json:"output_ResponseCode"`
 		OutputResponseDesc string `json:"output_ResponseDesc"`
 		OutputSessionID    string `json:"output_SessionID"`
