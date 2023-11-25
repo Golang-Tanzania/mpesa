@@ -21,6 +21,7 @@ const (
 	DebitDBPaymentPath  = "directDebitPayment"
 	QueryBeneficialPath = "queryBeneficiaryName"
 	QueryDirectDBPath   = "queryDirectDebit"
+	CancelDirectDBPath  = "directDebitCancel"
 )
 
 type (
@@ -218,5 +219,24 @@ type (
 		OutputPaymentDayFrom           string `json:"output_PaymentDayFrom,omitempty"`
 		OutputPaymentDayTo             string `json:"output_PaymentDayTo,omitempty"`
 		OutputExpiryDate               string `json:"output_ExpiryDate,omitempty"`
+	}
+
+	CancelDirectDBReq struct {
+		InputMsisdnToken              string `json:"input_MsisdnToken"`
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		InputCountry                  string `json:"input_Country"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputMandateID                string `json:"input_MandateID"`
+	}
+
+	CancelDirectDBRes struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionReference     string `json:"output_TransactionReference"`
+		OutputMsisdnToken              string `json:"output_MsisdnToken"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 )
