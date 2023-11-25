@@ -1,3 +1,25 @@
+/*
+Copyright (c) 2022-2023 Golang Tanzania
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package mpesa
 
 import (
@@ -20,6 +42,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// LoadKeys loads the public key and api key from a file
 func (c *Client) LoadKeys(path, filename, filetype, env string) {
 
 	viper.AddConfigPath(path)
@@ -39,6 +62,7 @@ func (c *Client) LoadKeys(path, filename, filetype, env string) {
 	c.Environment = env
 }
 
+// SetHTTPClient sets *http.Client to current client
 func (c *Client) SetHttpClient(client *http.Client) {
 	if client == nil {
 		c.Client = &http.Client{
@@ -49,6 +73,8 @@ func (c *Client) SetHttpClient(client *http.Client) {
 	c.Client = client
 }
 
+
+// createBearerToken encrypts the api key using the public key	
 func (c *Client) createBearerToken(apiKey string) (string, error) {
 
 	keyDer, _ := pem.Decode([]byte(c.fmtPubKey(c.Keys.PublicKey)))
@@ -66,6 +92,7 @@ func (c *Client) createBearerToken(apiKey string) (string, error) {
 	return encryptedKey, nil
 }
 
+// makeUrl constructs a full url
 func (c *Client) makeUrl(endpoint string) string {
 
 	var url string
@@ -79,6 +106,7 @@ func (c *Client) makeUrl(endpoint string) string {
 	return url
 }
 
+// genSessionKey generates a session key
 func (c *Client) genSessionKey() (*SessionKeyResponse, error) {
 
 	req, err := http.NewRequest("GET", c.makeUrl(SessionEndPath), nil)
@@ -99,6 +127,7 @@ func (c *Client) genSessionKey() (*SessionKeyResponse, error) {
 
 }
 
+// fmtPubKey formats the public key to the required format
 func (c *Client) fmtPubKey(publicKey string) string {
 	pubKey := fmt.Sprintf(`
 -----BEGIN RSA PUBLIC KEY-----
@@ -107,6 +136,9 @@ func (c *Client) fmtPubKey(publicKey string) string {
 	return pubKey
 }
 
+// Send makes a request to the API, the response body will be
+// unmarshalled into v, or if v is an io.Writer, the response will
+// be written to it without decoding
 func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
 	var (
 		err  error
@@ -161,6 +193,7 @@ func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
 
 }
 
+// SendWithAuth makes a request to the API and apply authentication automatically.
 func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) error {
 
 	bearerToken, err := c.createBearerToken(c.Keys.ApiKey)
@@ -175,6 +208,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) e
 	return c.Send(req, v, e)
 }
 
+// SendWithSessionKey makes a request to the API using generated sessionkey as bearer token.
 func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interface{}) error {
 
 	sessionkey, err := c.genSessionKey()
@@ -196,6 +230,10 @@ func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interfac
 	return c.Send(req, v, e)
 }
 
+
+
+// NewRequest constructs a request
+// Convert payload to a JSON
 func (c *Client) NewRequest(ctx context.Context, method, url string, payload interface{}) (*http.Request, error) {
 	var buf io.Reader
 
@@ -209,6 +247,8 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 	return http.NewRequestWithContext(ctx, method, url, buf)
 }
 
+
+// QueryValuesFromStruct converts a struct to url.Values
 func (c *Client) QueryValuesFromStruct(payload interface{}) (url.Values, error) {
 	values := url.Values{}
 
@@ -233,6 +273,7 @@ func (c *Client) QueryValuesFromStruct(payload interface{}) (url.Values, error) 
 	return values, nil
 }
 
+// NewReqWithQueryParams constructs a request with query params
 func (c *Client) NewReqWithQueryParams(ctx context.Context, method, baseUrl string, payload interface{}) (*http.Request, error) {
 
 	baseURL, err := url.Parse(baseUrl)
