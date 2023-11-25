@@ -16,6 +16,7 @@ const (
 	B2BPaymentPath  = "b2bPayment"
 	B2CPaymentPath  = "b2cPayment"
 	ReversalPath    = "reversal"
+	QueryTxStatusPath   = "queryTransactionStatus"
 )
 
 type (
@@ -106,5 +107,21 @@ type (
 		OutputTransactionID            string `json:"output_TransactionID"`
 		OutputConversationID           string `json:"output_ConversationID"`
 		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+	}
+
+	QueryTxStatusRequest struct {
+		InputQueryReference           string `json:"input_QueryReference"`
+		InputCountry                  string `json:"input_Country"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+	}
+
+	QueryTxStatusResponse struct {
+		OutputResponseCode              string `json:"output_ResponseCode"`
+		OutputResponseDesc              string `json:"output_ResponseDesc"`
+		OutputResponseTransactionStatus string `json:"output_ResponseTransactionStatus"`
+		OutputConversationID            string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID  string `json:"output_ThirdPartyConversationID"`
+		OutputOriginalTransactionID     string `json:"output_OriginalTransactionID"`
 	}
 )
