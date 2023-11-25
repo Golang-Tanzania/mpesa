@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -40,7 +41,9 @@ func (c *Client) LoadKeys(path, filename, filetype, env string) {
 
 func (c *Client) SetHttpClient(client *http.Client) {
 	if client == nil {
-		c.Client = http.DefaultClient
+		c.Client = &http.Client{
+			Timeout: 30 * time.Second,
+		}
 		return
 	}
 	c.Client = client
