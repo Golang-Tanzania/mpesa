@@ -18,6 +18,7 @@ const (
 	ReversalPath      = "reversal"
 	QueryTxStatusPath = "queryTransactionStatus"
 	DirectDebitPath   = "directDebitCreation"
+	DebitDBPaymentPath    = "directDebitPayment"
 )
 
 type (
@@ -147,5 +148,26 @@ type (
 		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
 		OutputConversationID           string `json:"output_ConversationID"`
 		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+	}
+
+	DebitDBPaymentReq struct {
+		InputMsisdnToken              string `json:"input_MsisdnToken,omitempty"`
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
+		InputCountry                  string `json:"input_Country"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputAmount                   string `json:"input_Amount"`
+		InputCurrency                 string `json:"input_Currency"`
+		InputMandateID                string `json:"input_MandateID,omitempty"`
+	}
+
+	DebitDBPaymentRes struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionID            string `json:"output_TransactionID"`
+		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID,omitempty"`
 	}
 )
