@@ -15,6 +15,7 @@ const (
 	C2BPaymentPath  = "c2bPayment/singleStage"
 	B2BPaymentPath  = "b2bPayment"
 	B2CPaymentPath  = "b2cPayment"
+	ReversalPath    = "reversal"
 )
 
 type (
@@ -84,6 +85,22 @@ type (
 	}
 
 	B2CPaymentResponse struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionID            string `json:"output_TransactionID"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+	}
+
+	ReversalRequest struct {
+		InputReversalAmount           string `json:"input_ReversalAmount,omitempty"`
+		InputCountry                  string `json:"input_Country"`
+		InputTransactionID            string `json:"input_TransactionID"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+	}
+
+	ReversalResponse struct {
 		OutputResponseCode             string `json:"output_ResponseCode"`
 		OutputResponseDesc             string `json:"output_ResponseDesc"`
 		OutputTransactionID            string `json:"output_TransactionID"`
