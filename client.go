@@ -9,9 +9,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"reflect"
 
 	"github.com/spf13/viper"
 )
@@ -201,4 +204,46 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 		buf = bytes.NewBuffer(b)
 	}
 	return http.NewRequestWithContext(ctx, method, url, buf)
+}
+
+func (c *Client) QueryValuesFromStruct(payload interface{}) (url.Values, error) {
+	values := url.Values{}
+
+	payloadValue := reflect.ValueOf(payload)
+
+	if payloadValue.Kind() != reflect.Struct {
+		return nil, errors.New("payload is not a struct")
+	}
+
+	for i := 0; i < payloadValue.NumField(); i++ {
+		field := payloadValue.Type().Field(i)
+		fieldValue := payloadValue.Field(i)
+
+		tag := field.Tag.Get("json")
+		if tag == "" {
+			continue
+		}
+
+		values.Add(tag, fmt.Sprint(fieldValue.Interface()))
+	}
+
+	return values, nil
+}
+
+func (c *Client) NewReqWithQueryParams(ctx context.Context, method, baseUrl string, payload interface{}) (*http.Request, error) {
+
+	baseURL, err := url.Parse(baseUrl)
+
+	if err != nil {
+		return nil, err
+	}
+
+	params, err := c.QueryValuesFromStruct(payload)
+
+	if err != nil {
+		return nil, err
+	}
+	baseURL.RawQuery = params.Encode()
+
+	return http.NewRequestWithContext(ctx, method, baseURL.String(), nil)
 }
