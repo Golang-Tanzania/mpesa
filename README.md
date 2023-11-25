@@ -397,7 +397,7 @@ func main() {
 	client.SetHttpClient(customClient)
 
 
-	f := mpesa.DirectDebitRequest{
+	f := mpesa.DirectDBCreateReq{
 		InputCustomerMSISDN:         "000000000001",
 		InputCountry:                "TZN",
 		InputServiceProviderCode:    "000000",
