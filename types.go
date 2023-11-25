@@ -20,6 +20,7 @@ const (
 	DirectDebitPath     = "directDebitCreation"
 	DebitDBPaymentPath  = "directDebitPayment"
 	QueryBeneficialPath = "queryBeneficiaryName"
+	QueryDirectDBPath   = "queryDirectDebit"
 )
 
 type (
@@ -187,5 +188,35 @@ type (
 		OutputCustomerLastName         string `json:"output_CustomerLastName"`
 		OutputConversationID           string `json:"output_ConversationID"`
 		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+	}
+
+	QueryDirectDBReq struct {
+		InputQueryBalanceAmount       bool   `json:"input_QueryBalanceAmount"`
+		InputBalanceAmount            string `json:"input_BalanceAmount,omitempty"`
+		InputCountry                  string `json:"input_Country"`
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
+		InputMsisdnToken              string `json:"input_MsisdnToken,omitempty"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		InputMandateID                string `json:"input_MandateID,omitempty"`
+		InputCurrency                 string `json:"input_Currency"`
+	}
+	QueryDirectDBRes struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionReference     string `json:"output_TransactionReference"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		OutputSufficientBalance        bool   `json:"output_SufficientBalance"`
+		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		OutputMandateID                string `json:"output_MandateID"`
+		OutputMandateStatus            string `json:"output_MandateStatus"`
+		OutputAccountStatus            string `json:"output_AccountStatus"`
+		OutputFirstPaymentDate         string `json:"output_FirstPaymentDate,omitempty"`
+		OutputFrequency                string `json:"output_Frequency,omitempty"`
+		OutputPaymentDayFrom           string `json:"output_PaymentDayFrom,omitempty"`
+		OutputPaymentDayTo             string `json:"output_PaymentDayTo,omitempty"`
+		OutputExpiryDate               string `json:"output_ExpiryDate,omitempty"`
 	}
 )
