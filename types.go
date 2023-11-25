@@ -5,18 +5,19 @@ import (
 )
 
 const (
-	Address         = "openapi.m-pesa.com"
-	Ssl             = true
-	Port            = 443
-	Sandbox         = "sandbox"
-	ProdEndpoint    = "/openapi/ipg/v2/vodacomTZN/"
-	SandboxEndpoint = "/sandbox/ipg/v2/vodacomTZN/"
-	SessionEndPath  = "getSession"
-	C2BPaymentPath  = "c2bPayment/singleStage"
-	B2BPaymentPath  = "b2bPayment"
-	B2CPaymentPath  = "b2cPayment"
-	ReversalPath    = "reversal"
-	QueryTxStatusPath   = "queryTransactionStatus"
+	Address           = "openapi.m-pesa.com"
+	Ssl               = true
+	Port              = 443
+	Sandbox           = "sandbox"
+	ProdEndpoint      = "/openapi/ipg/v2/vodacomTZN/"
+	SandboxEndpoint   = "/sandbox/ipg/v2/vodacomTZN/"
+	SessionEndPath    = "getSession"
+	C2BPaymentPath    = "c2bPayment/singleStage"
+	B2BPaymentPath    = "b2bPayment"
+	B2CPaymentPath    = "b2cPayment"
+	ReversalPath      = "reversal"
+	QueryTxStatusPath = "queryTransactionStatus"
+	DirectDebitPath   = "directDebitCreation"
 )
 
 type (
@@ -123,5 +124,28 @@ type (
 		OutputConversationID            string `json:"output_ConversationID"`
 		OutputThirdPartyConversationID  string `json:"output_ThirdPartyConversationID"`
 		OutputOriginalTransactionID     string `json:"output_OriginalTransactionID"`
+	}
+
+	DirectDebitRequest struct {
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		InputCountry                  string `json:"input_Country"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputAgreedTC                 string `json:"input_AgreedTC"`
+		InputFirstPaymentDate         string `json:"input_FirstPaymentDate,omitempty"`
+		InputFrequency                string `json:"input_Frequency,omitempty"`
+		InputStartRangeOfDays         string `json:"input_StartRangeOfDays,omitempty"`
+		InputEndRangeOfDays           string `json:"input_EndRangeOfDays,omitempty"`
+		InputExpiryDate               string `json:"input_ExpiryDate,omitempty"`
+	}
+
+	DirectDebitResponse struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionReference     string `json:"output_TransactionReference"`
+		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 )
