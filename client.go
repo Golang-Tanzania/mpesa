@@ -1,6 +1,8 @@
 package mpesa
 
 import (
+	"bytes"
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -41,7 +43,7 @@ func (c *Client) SetHttpClient(client *http.Client) {
 	c.Client = client
 }
 
-func (c *Client) createBearerToken() (string, error) {
+func (c *Client) createBearerToken(apiKey string) (string, error) {
 
 	keyDer, _ := pem.Decode([]byte(c.fmtPubKey(c.Keys.PublicKey)))
 	pub, err := x509.ParsePKIXPublicKey([]byte(keyDer.Bytes))
@@ -49,7 +51,7 @@ func (c *Client) createBearerToken() (string, error) {
 		return "", err
 	}
 	pubKey := pub.(*rsa.PublicKey)
-	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, pubKey, []byte(c.Keys.ApiKey))
+	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, pubKey, []byte(apiKey))
 	if err != nil {
 		return "", err
 	}
@@ -155,7 +157,7 @@ func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
 
 func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) error {
 
-	bearerToken, err := c.createBearerToken()
+	bearerToken, err := c.createBearerToken(c.Keys.ApiKey)
 
 	if err != nil {
 		return err
@@ -168,3 +170,37 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) e
 }
 
 
+func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interface{}) error {
+
+	sessionkey, err := c.genSessionId()
+
+	if err != nil {
+		return err
+	}
+
+	tokenKey, err := c.createBearerToken(sessionkey.OutputSessionID)
+
+	if err != nil {
+		return err
+	}
+
+	bearer := fmt.Sprintf("Bearer %v", tokenKey)
+
+	req.Header.Set("Authorization", bearer)
+
+	return c.Send(req, v, e)
+}
+
+
+func (c *Client) NewRequest(ctx context.Context, method, url string, payload interface{}) (*http.Request, error) {
+	var buf io.Reader
+
+	if payload != nil {
+		b, err := json.Marshal(&payload)
+		if err != nil {
+			return nil, err
+		}
+		buf = bytes.NewBuffer(b)
+	}
+	return http.NewRequestWithContext(ctx, method, url, buf)
+}
