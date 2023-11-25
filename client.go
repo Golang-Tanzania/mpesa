@@ -79,41 +79,15 @@ func (c *Client) genSessionId() (*SessionIDResponse, error) {
 		return nil, err
 	}
 
-	bearerToken, err := c.createBearerToken()
+	var res *SessionIDResponse
 
-	if err != nil {
-		return nil, err
-	}
-	bearer := fmt.Sprintf("Bearer %v", bearerToken)
-
-	req.Header.Set("Authorization", bearer)
-	req.Header.Set("Host", Address)
-	req.Header.Set("Origin", "*")
-	req.Header.Set("Content-Type", "application/json")
-
-	client := c.Client
-
-	resp, err := client.Do(req)
+	err = c.SendWithAuth(req, &res, nil)
 
 	if err != nil {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var res SessionIDResponse
-	err = json.Unmarshal([]byte(body), &res)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	return res, nil
 
 }
 
@@ -123,6 +97,74 @@ func (c *Client) fmtPubKey(publicKey string) string {
 %s
 -----END RSA PUBLIC KEY-----`, publicKey)
 	return pubKey
+}
+
+func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
+	var (
+		err  error
+		resp *http.Response
+		data []byte
+	)
+
+	// Set default headers
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Host", Address)
+	req.Header.Set("Origin", "*")
+
+	if req.Header.Get("Content-type") == "" {
+		req.Header.Set("Content-type", "application/json")
+	}
+
+	resp, err = c.Client.Do(req)
+
+	if err != nil {
+		return err
+	}
+	defer func(Body io.ReadCloser) error {
+		return Body.Close()
+	}(resp.Body)
+
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+
+		data, err = io.ReadAll(resp.Body)
+
+		if e == nil {
+			return fmt.Errorf("unknown error (%s), status code: %d", string(data), resp.StatusCode)
+		}
+
+		if err == nil && len(data) > 0 {
+			err := json.Unmarshal(data, e)
+			if err != nil {
+				return err
+			}
+		}
+
+		return fmt.Errorf("unknown error, status code: %d", resp.StatusCode)
+	}
+	if v == nil {
+		return nil
+	}
+
+	if w, ok := v.(io.Writer); ok {
+		_, err := io.Copy(w, resp.Body)
+		return err
+	}
+	return json.NewDecoder(resp.Body).Decode(v)
+
+}
+
+func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) error {
+
+	bearerToken, err := c.createBearerToken()
+
+	if err != nil {
+		return err
+	}
+	bearer := fmt.Sprintf("Bearer %v", bearerToken)
+
+	req.Header.Set("Authorization", bearer)
+
+	return c.Send(req, v, e)
 }
 
 
