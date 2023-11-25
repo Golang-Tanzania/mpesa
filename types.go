@@ -14,6 +14,7 @@ const (
 	SessionEndPath  = "getSession"
 	C2BPaymentPath  = "c2bPayment/singleStage"
 	B2BPaymentPath  = "b2bPayment"
+	B2CPaymentPath  = "b2cPayment"
 )
 
 type (
@@ -64,6 +65,25 @@ type (
 		InputPurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`
 	}
 	B2BPaymentResponse struct {
+		OutputResponseCode             string `json:"output_ResponseCode"`
+		OutputResponseDesc             string `json:"output_ResponseDesc"`
+		OutputTransactionID            string `json:"output_TransactionID"`
+		OutputConversationID           string `json:"output_ConversationID"`
+		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+	}
+
+	B2CPaymentRequest struct {
+		InputAmount                   string `json:"input_Amount"`
+		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		InputCountry                  string `json:"input_Country"`
+		InputCurrency                 string `json:"input_Currency"`
+		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		InputTransactionReference     string `json:"input_TransactionReference"`
+		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		InputPaymentItemsDesc         string `json:"input_PaymentItemsDesc"`
+	}
+
+	B2CPaymentResponse struct {
 		OutputResponseCode             string `json:"output_ResponseCode"`
 		OutputResponseDesc             string `json:"output_ResponseDesc"`
 		OutputTransactionID            string `json:"output_TransactionID"`
