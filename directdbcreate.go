@@ -4,13 +4,13 @@ import (
 	"context"
 )
 
-func (c *Client) DirectDebitCreate(ctx context.Context, payload DirectDebitRequest) (*DirectDebitResponse, error) {
+func (c *Client) DirectDebitCreate(ctx context.Context, payload DirectDBCreateReq) (*DirectDBCreateRes, error) {
 
 	req, err := c.NewRequest(ctx, "POST", c.makeUrl(DirectDebitPath), payload)
 	if err != nil {
 		return nil, err
 	}
-	resp := &DirectDebitResponse{}
+	resp := &DirectDBCreateRes{}
 
 	err = c.SendWithSessionKey(req, resp, nil)
 

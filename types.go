@@ -130,7 +130,7 @@ type (
 		OutputOriginalTransactionID     string `json:"output_OriginalTransactionID"`
 	}
 
-	DirectDebitRequest struct {
+	DirectDBCreateReq struct {
 		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
 		InputCountry                  string `json:"input_Country"`
 		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
@@ -144,7 +144,7 @@ type (
 		InputExpiryDate               string `json:"input_ExpiryDate,omitempty"`
 	}
 
-	DirectDebitResponse struct {
+	DirectDBCreateRes struct {
 		OutputResponseCode             string `json:"output_ResponseCode"`
 		OutputResponseDesc             string `json:"output_ResponseDesc"`
 		OutputTransactionReference     string `json:"output_TransactionReference"`
