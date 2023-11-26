@@ -348,6 +348,27 @@ func main() {
 ### Query Direct Debit
 
 ```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/Golang-Tanzania/mpesa"
+)
+
+func main() {
+	var client mpesa.Client
+
+	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
+
+	customClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	client.SetHttpClient(customClient)
+
 
 	i := mpesa.QueryDirectDBReq{
 		InputQueryBalanceAmount:       true,
@@ -517,7 +538,7 @@ func main() {
 
 ## Authors
 
-This package is authored and maintained by [Mojo](https://github.com/AvicennaJr) and [Hopertz](https://github.com/Hopertz).
+This package is authored and maintained by [Hopertz](https://github.com/Hopertz) and [Mojo](https://github.com/AvicennaJr).
 A list of all other contributors can be found [here](https://github.com/Golang-Tanzania/mpesa/graphs/contributors).
 
 ## Contributing
