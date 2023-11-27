@@ -38,43 +38,45 @@ import (
 	"net/url"
 	"reflect"
 	"time"
-
-	"github.com/spf13/viper"
 )
 
-// LoadKeys loads the public key and api key from a file
-func (c *Client) LoadKeys(path, filename, filetype, env string) {
-
-	viper.AddConfigPath(path)
-	viper.SetConfigName(filename)
-	viper.SetConfigType(filetype)
-	viper.ReadInConfig()
-
-	if err := viper.ReadInConfig(); err != nil {
-		panic("Error reading config file, " + err.Error())
+// NewClient returns new Client struct
+func NewClient(api_key string, envtype string) (*Client, error) {
+	if api_key == "" || envtype == "" {
+		return nil, errors.New("api Key, environment are required to create a Client")
 	}
 
-	c.Keys = &Keys{
-		PublicKey: viper.GetString("public_key"),
-		ApiKey:    viper.GetString("api_key"),
+	var keys *Keys
+
+	if envtype == Sandbox {
+		keys = &Keys{
+			PublicKey: SandboxPublicKey,
+			ApiKey:    api_key,
+		}
+
+	} else if envtype == Production {
+		keys = &Keys{
+			PublicKey: OpenapiPublicKey,
+			ApiKey:    api_key,
+		}
+
 	}
 
-	c.Environment = env
+	return &Client{
+		Client: &http.Client{
+			Timeout: 30 * time.Second,
+		},
+		Keys:        keys,
+		Environment: envtype,
+	}, nil
 }
 
 // SetHTTPClient sets *http.Client to current client
 func (c *Client) SetHttpClient(client *http.Client) {
-	if client == nil {
-		c.Client = &http.Client{
-			Timeout: 30 * time.Second,
-		}
-		return
-	}
 	c.Client = client
 }
 
-
-// createBearerToken encrypts the api key using the public key	
+// createBearerToken encrypts the api key using the public key
 func (c *Client) createBearerToken(apiKey string) (string, error) {
 
 	keyDer, _ := pem.Decode([]byte(c.fmtPubKey(c.Keys.PublicKey)))
@@ -230,8 +232,6 @@ func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interfac
 	return c.Send(req, v, e)
 }
 
-
-
 // NewRequest constructs a request
 // Convert payload to a JSON
 func (c *Client) NewRequest(ctx context.Context, method, url string, payload interface{}) (*http.Request, error) {
@@ -246,7 +246,6 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 	}
 	return http.NewRequestWithContext(ctx, method, url, buf)
 }
-
 
 // QueryValuesFromStruct converts a struct to url.Values
 func (c *Client) QueryValuesFromStruct(payload interface{}) (url.Values, error) {
