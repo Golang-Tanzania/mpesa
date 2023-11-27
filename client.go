@@ -41,7 +41,7 @@ import (
 )
 
 // NewClient returns new Client struct
-func NewClient(api_key string, envtype string) (*Client, error) {
+func NewClient(api_key string, envtype string, sessionLife int32) (*Client, error) {
 	if api_key == "" || envtype == "" {
 		return nil, errors.New("api Key, environment are required to create a Client")
 	}
@@ -68,6 +68,7 @@ func NewClient(api_key string, envtype string) (*Client, error) {
 		},
 		Keys:        keys,
 		Environment: envtype,
+		SessionLife: sessionLife,
 	}, nil
 }
 
@@ -213,13 +214,29 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) e
 // SendWithSessionKey makes a request to the API using generated sessionkey as bearer token.
 func (c *Client) SendWithSessionKey(req *http.Request, v interface{}, e interface{}) error {
 
-	sessionkey, err := c.genSessionKey()
+	c.mu.Lock()
+	if c.SessionKey == "" {
+		sessionkey, err := c.genSessionKey()
+		if err != nil {
+			return err
+		}
 
-	if err != nil {
-		return err
+		c.ExpiresAt = time.Now().Add(time.Duration(c.SessionLife) * time.Second * 3600)
+		c.SessionKey = sessionkey.OutputSessionID
+
+	} else if !c.ExpiresAt.IsZero() && time.Until(c.ExpiresAt) < ReqNewSessionKeyBeforeExpiresIn {
+		sessionkey, err := c.genSessionKey()
+		if err != nil {
+			return err
+		}
+
+		c.ExpiresAt = time.Now().Add(time.Duration(c.SessionLife) * time.Second * 3600)
+		c.SessionKey = sessionkey.OutputSessionID
 	}
 
-	tokenKey, err := c.createBearerToken(sessionkey.OutputSessionID)
+	c.mu.Unlock()
+
+	tokenKey, err := c.createBearerToken(c.SessionKey)
 
 	if err != nil {
 		return err
