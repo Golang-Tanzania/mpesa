@@ -46,7 +46,27 @@ import (
 )
 ```
 
+## Usage 
 
+```go
+   // NewClient returns new Client struct
+   client, err := mpesa.NewClient("your-api-key", "sandbox", 24)
+   // "your-api-key" obtained at https://openapiportal.m-pesa.com
+   // sandbox is environment type can either be "sandbox" or "production"
+   // 24 represent hours, its session lifetime before we request another session it can be found in the 
+   // https://openapiportal.m-pesa.com/applications where you set for your application,
+
+
+
+   // use custom htttp client
+
+   c :=  http.Client{
+	      Timeout: 50 * time.Second,
+	},
+
+   client.SetHttpClient(c)
+
+```
 
 
 ## Examples
@@ -69,7 +89,7 @@ import (
 
 func main() {
 
-    client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+    client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +130,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -154,7 +174,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -197,7 +217,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -237,7 +257,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -276,7 +296,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -316,7 +336,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -361,7 +381,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -407,7 +427,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -450,7 +470,7 @@ import (
 
 func main() {
 
-    client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+    client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
 	if err != nil {
 		panic(err)
 	}
