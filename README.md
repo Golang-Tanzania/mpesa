@@ -26,29 +26,7 @@ Golang bindings for the [Mpesa Payment API](openapiportal.m-pesa.com/). Make you
 
     You can go through this blog, [Getting Started With Mpesa Developer API](https://dev.to/alphaolomi/getting-started-with-mpesa-developer-portal-46a4) for a more detailed guide.
 
-- API key and Public key can be put in a file the following extensions `json, yaml, .env`
 
-Supported extensions
-
-json
- ```
-  {
-      "api_key":"your-api-key",
-      "public_key":"your-public-key"
-  }
-  ```
-
-yaml
-```yaml
-api_key: your-api-key
-public_key: your public key
-```
-.env
-```
-api_key=your-api-key
-public_key=your-public-key
-
-```
 
 ## Installation
 
@@ -68,16 +46,8 @@ import (
 )
 ```
 
-## Load keys
 
-First create a new variable of type `mpesa.Client` and then load the configs that we put on config dir, in it there is config.json file
 
-```go
-var client mpesa.Client
-
-client.LoadKeys("path to dir", "file", "file extension(json,yaml,.env)", environment(mpesa.Sandbox/mpesa.Production))
-client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-```
 
 ## Examples
 
@@ -98,14 +68,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+    client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
 
 	a := mpesa.C2BPaymentRequest{
 		InputAmount:                   "100",
@@ -142,15 +109,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
-
 
 	c := mpesa.B2CPaymentRequest{
 		InputAmount:                   "100",
@@ -190,14 +153,12 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
+
 
 	b := mpesa.B2BPaymentRequest{
 		InputAmount:            "100",
@@ -235,14 +196,12 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
+
 
 	d :=  mpesa.ReversalRequest{
 		InputTransactionID: "0000000000001",
@@ -277,14 +236,12 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
-
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
+
 
 	e := mpesa.QueryTxStatusRequest{
 		InputQueryReference:           "000000000000000000001",
@@ -318,14 +275,12 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
-
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
+
 
 	h := mpesa.QueryBenRequest{
 		InputCountry:                  "TZN",
@@ -360,14 +315,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
-
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
 
 
 	i := mpesa.QueryDirectDBReq{
@@ -408,14 +360,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
-
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
 
 
 	f := mpesa.DirectDBCreateReq{
@@ -457,15 +406,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+	client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
-
 
 
 	g := mpesa.DebitDBPaymentReq{
@@ -504,15 +449,11 @@ import (
 )
 
 func main() {
-	var client mpesa.Client
 
-	client.LoadKeys("./config", "config", "json", mpesa.Sandbox)
-
-	customClient := &http.Client{
-		Timeout: 10 * time.Second,
+    client, err := mpesa.NewClient("your-api-key", "sandbox") // if production just use "production"
+	if err != nil {
+		panic(err)
 	}
-	client.SetHttpClient(customClient)
-
 
 
 	j := mpesa.CancelDirectDBReq{
