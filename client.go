@@ -38,12 +38,14 @@ import (
 	"net/url"
 	"reflect"
 	"time"
+
+
 )
 
 // NewClient returns new Client struct
-func NewClient(api_key string, envtype string, sessionLife int32) (*Client, error) {
-	if api_key == "" || envtype == "" {
-		return nil, errors.New("api Key, environment are required to create a Client")
+func NewClient(api_key string, envtype Env, sessionLife int32) (*Client, error) {
+	if api_key == "" {
+		return nil, errors.New("api Key is to create a Client")
 	}
 
 	var keys *Keys
@@ -100,7 +102,7 @@ func (c *Client) makeUrl(endpoint string) string {
 
 	var url string
 
-	if c.Environment == "production" {
+	if c.Environment == Production {
 		url = fmt.Sprintf("https://%v:%v%v%v/", Address, Port, ProdEndpoint, endpoint)
 	} else {
 		url = fmt.Sprintf("https://%v:%v%v%v/", Address, Port, SandboxEndpoint, endpoint)

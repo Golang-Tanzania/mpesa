@@ -50,9 +50,9 @@ import (
 
 ```go
    // NewClient returns new Client struct
-   client, err := mpesa.NewClient("your-api-key", "sandbox", 24)
+   client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24)
    // "your-api-key" obtained at https://openapiportal.m-pesa.com
-   // sandbox is environment type can either be "sandbox" or "production"
+   // sandbox is environment type can either be mpesa.Sandbox or mpesa.Production
    // 24 represent hours, its session lifetime before we request another session it can be found in the 
    // https://openapiportal.m-pesa.com/applications where you set for your application,
 
@@ -89,7 +89,7 @@ import (
 
 func main() {
 
-    client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+    client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -130,7 +130,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -174,7 +174,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -217,7 +217,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -257,7 +257,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -296,7 +296,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -336,7 +336,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -381,7 +381,7 @@ import (
 
 func main() {
 	
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -427,7 +427,7 @@ import (
 
 func main() {
 
-	client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+	client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
@@ -470,7 +470,7 @@ import (
 
 func main() {
 
-    client, err := mpesa.NewClient("your-api-key", "sandbox", 24) 
+    client, err := mpesa.NewClient("your-api-key", mpesa.Sandbox, 24) 
 	if err != nil {
 		panic(err)
 	}
