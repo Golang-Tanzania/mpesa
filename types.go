@@ -75,200 +75,200 @@ type (
 	}
 
 	C2BPaymentRequest struct {
-		InputAmount                   string `json:"input_Amount"`
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
-		InputCountry                  string `json:"input_Country"`
-		InputCurrency                 string `json:"input_Currency"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputTransactionReference     string `json:"input_TransactionReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputPurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`
+		Amount                   string `json:"input_Amount"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		Country                  string `json:"input_Country"`
+		Currency                 string `json:"input_Currency"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		TransactionReference     string `json:"input_TransactionReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		PurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`
 	}
 
 	C2BPaymentResponse struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionID            string `json:"output_TransactionID"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionID            string `json:"output_TransactionID"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	B2BPaymentRequest struct {
-		InputAmount                   string `json:"input_Amount"`
-		InputReceiverPartyCode        string `json:"input_ReceiverPartyCode"`
-		InputCountry                  string `json:"input_Country"`
-		InputCurrency                 string `json:"input_Currency"`
-		InputPrimaryPartyCode         string `json:"input_PrimaryPartyCode"`
-		InputTransactionReference     string `json:"input_TransactionReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputPurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`
+		Amount                   string `json:"input_Amount"`
+		ReceiverPartyCode        string `json:"input_ReceiverPartyCode"`
+		Country                  string `json:"input_Country"`
+		Currency                 string `json:"input_Currency"`
+		PrimaryPartyCode         string `json:"input_PrimaryPartyCode"`
+		TransactionReference     string `json:"input_TransactionReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		PurchasedItemsDesc       string `json:"input_PurchasedItemsDesc"`
 	}
 	B2BPaymentResponse struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionID            string `json:"output_TransactionID"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionID            string `json:"output_TransactionID"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	B2CPaymentRequest struct {
-		InputAmount                   string `json:"input_Amount"`
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
-		InputCountry                  string `json:"input_Country"`
-		InputCurrency                 string `json:"input_Currency"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputTransactionReference     string `json:"input_TransactionReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputPaymentItemsDesc         string `json:"input_PaymentItemsDesc"`
+		Amount                   string `json:"input_Amount"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		Country                  string `json:"input_Country"`
+		Currency                 string `json:"input_Currency"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		TransactionReference     string `json:"input_TransactionReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		PaymentItemsDesc         string `json:"input_PaymentItemsDesc"`
 	}
 
 	B2CPaymentResponse struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionID            string `json:"output_TransactionID"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionID            string `json:"output_TransactionID"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	ReversalRequest struct {
-		InputReversalAmount           string `json:"input_ReversalAmount,omitempty"`
-		InputCountry                  string `json:"input_Country"`
-		InputTransactionID            string `json:"input_TransactionID"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		ReversalAmount           string `json:"input_ReversalAmount,omitempty"`
+		Country                  string `json:"input_Country"`
+		TransactionID            string `json:"input_TransactionID"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
 	}
 
 	ReversalResponse struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionID            string `json:"output_TransactionID"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionID            string `json:"output_TransactionID"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	QueryTxStatusRequest struct {
-		InputQueryReference           string `json:"input_QueryReference"`
-		InputCountry                  string `json:"input_Country"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		QueryReference           string `json:"input_QueryReference"`
+		Country                  string `json:"input_Country"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
 	}
 
 	QueryTxStatusResponse struct {
-		OutputResponseCode              string `json:"output_ResponseCode"`
-		OutputResponseDesc              string `json:"output_ResponseDesc"`
-		OutputResponseTransactionStatus string `json:"output_ResponseTransactionStatus"`
-		OutputConversationID            string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID  string `json:"output_ThirdPartyConversationID"`
-		OutputOriginalTransactionID     string `json:"output_OriginalTransactionID"`
+		ResponseCode              string `json:"output_ResponseCode"`
+		ResponseDesc              string `json:"output_ResponseDesc"`
+		ResponseTransactionStatus string `json:"output_ResponseTransactionStatus"`
+		ConversationID            string `json:"output_ConversationID"`
+		ThirdPartyConversationID  string `json:"output_ThirdPartyConversationID"`
+		OriginalTransactionID     string `json:"output_OriginalTransactionID"`
 	}
 
 	DirectDBCreateReq struct {
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
-		InputCountry                  string `json:"input_Country"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputAgreedTC                 string `json:"input_AgreedTC"`
-		InputFirstPaymentDate         string `json:"input_FirstPaymentDate,omitempty"`
-		InputFrequency                string `json:"input_Frequency,omitempty"`
-		InputStartRangeOfDays         string `json:"input_StartRangeOfDays,omitempty"`
-		InputEndRangeOfDays           string `json:"input_EndRangeOfDays,omitempty"`
-		InputExpiryDate               string `json:"input_ExpiryDate,omitempty"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		Country                  string `json:"input_Country"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		AgreedTC                 string `json:"input_AgreedTC"`
+		FirstPaymentDate         string `json:"input_FirstPaymentDate,omitempty"`
+		Frequency                string `json:"input_Frequency,omitempty"`
+		StartRangeOfDays         string `json:"input_StartRangeOfDays,omitempty"`
+		EndRangeOfDays           string `json:"input_EndRangeOfDays,omitempty"`
+		ExpiryDate               string `json:"input_ExpiryDate,omitempty"`
 	}
 
 	DirectDBCreateRes struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionReference     string `json:"output_TransactionReference"`
-		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionReference     string `json:"output_TransactionReference"`
+		MsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	DebitDBPaymentReq struct {
-		InputMsisdnToken              string `json:"input_MsisdnToken,omitempty"`
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
-		InputCountry                  string `json:"input_Country"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputAmount                   string `json:"input_Amount"`
-		InputCurrency                 string `json:"input_Currency"`
-		InputMandateID                string `json:"input_MandateID,omitempty"`
+		MsisdnToken              string `json:"input_MsisdnToken,omitempty"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
+		Country                  string `json:"input_Country"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		Amount                   string `json:"input_Amount"`
+		Currency                 string `json:"input_Currency"`
+		MandateID                string `json:"input_MandateID,omitempty"`
 	}
 
 	DebitDBPaymentRes struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionID            string `json:"output_TransactionID"`
-		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID,omitempty"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionID            string `json:"output_TransactionID"`
+		MsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID,omitempty"`
 	}
 
 	QueryBenRequest struct {
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
-		InputCountry                  string `json:"input_Country"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputKycQueryType             string `json:"input_KycQueryType"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		Country                  string `json:"input_Country"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		KycQueryType             string `json:"input_KycQueryType"`
 	}
 
 	QueryBenResponse struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputCustomerFirstName        string `json:"output_CustomerFirstName"`
-		OutputCustomerLastName         string `json:"output_CustomerLastName"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		CustomerFirstName        string `json:"output_CustomerFirstName"`
+		CustomerLastName         string `json:"output_CustomerLastName"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 
 	QueryDirectDBReq struct {
-		InputQueryBalanceAmount       bool   `json:"input_QueryBalanceAmount"`
-		InputBalanceAmount            string `json:"input_BalanceAmount,omitempty"`
-		InputCountry                  string `json:"input_Country"`
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
-		InputMsisdnToken              string `json:"input_MsisdnToken,omitempty"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
-		InputMandateID                string `json:"input_MandateID,omitempty"`
-		InputCurrency                 string `json:"input_Currency"`
+		QueryBalanceAmount       bool   `json:"input_QueryBalanceAmount"`
+		BalanceAmount            string `json:"input_BalanceAmount,omitempty"`
+		Country                  string `json:"input_Country"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN,omitempty"`
+		MsisdnToken              string `json:"input_MsisdnToken,omitempty"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		ThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		MandateID                string `json:"input_MandateID,omitempty"`
+		Currency                 string `json:"input_Currency"`
 	}
 	QueryDirectDBRes struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionReference     string `json:"output_TransactionReference"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
-		OutputSufficientBalance        bool   `json:"output_SufficientBalance"`
-		OutputMsisdnToken              string `json:"output_MsisdnToken,omitempty"`
-		OutputMandateID                string `json:"output_MandateID"`
-		OutputMandateStatus            string `json:"output_MandateStatus"`
-		OutputAccountStatus            string `json:"output_AccountStatus"`
-		OutputFirstPaymentDate         string `json:"output_FirstPaymentDate,omitempty"`
-		OutputFrequency                string `json:"output_Frequency,omitempty"`
-		OutputPaymentDayFrom           string `json:"output_PaymentDayFrom,omitempty"`
-		OutputPaymentDayTo             string `json:"output_PaymentDayTo,omitempty"`
-		OutputExpiryDate               string `json:"output_ExpiryDate,omitempty"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionReference     string `json:"output_TransactionReference"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		SufficientBalance        bool   `json:"output_SufficientBalance"`
+		MsisdnToken              string `json:"output_MsisdnToken,omitempty"`
+		MandateID                string `json:"output_MandateID"`
+		MandateStatus            string `json:"output_MandateStatus"`
+		AccountStatus            string `json:"output_AccountStatus"`
+		FirstPaymentDate         string `json:"output_FirstPaymentDate,omitempty"`
+		Frequency                string `json:"output_Frequency,omitempty"`
+		PaymentDayFrom           string `json:"output_PaymentDayFrom,omitempty"`
+		PaymentDayTo             string `json:"output_PaymentDayTo,omitempty"`
+		ExpiryDate               string `json:"output_ExpiryDate,omitempty"`
 	}
 
 	CancelDirectDBReq struct {
-		InputMsisdnToken              string `json:"input_MsisdnToken"`
-		InputCustomerMSISDN           string `json:"input_CustomerMSISDN"`
-		InputCountry                  string `json:"input_Country"`
-		InputServiceProviderCode      string `json:"input_ServiceProviderCode"`
-		InputThirdPartyReference      string `json:"input_ThirdPartyReference"`
-		InputThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
-		InputMandateID                string `json:"input_MandateID"`
+		MsisdnToken              string `json:"input_MsisdnToken"`
+		CustomerMSISDN           string `json:"input_CustomerMSISDN"`
+		Country                  string `json:"input_Country"`
+		ServiceProviderCode      string `json:"input_ServiceProviderCode"`
+		ThirdPartyReference      string `json:"input_ThirdPartyReference"`
+		ThirdPartyConversationID string `json:"input_ThirdPartyConversationID"`
+		MandateID                string `json:"input_MandateID"`
 	}
 
 	CancelDirectDBRes struct {
-		OutputResponseCode             string `json:"output_ResponseCode"`
-		OutputResponseDesc             string `json:"output_ResponseDesc"`
-		OutputTransactionReference     string `json:"output_TransactionReference"`
-		OutputMsisdnToken              string `json:"output_MsisdnToken"`
-		OutputConversationID           string `json:"output_ConversationID"`
-		OutputThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
+		ResponseCode             string `json:"output_ResponseCode"`
+		ResponseDesc             string `json:"output_ResponseDesc"`
+		TransactionReference     string `json:"output_TransactionReference"`
+		MsisdnToken              string `json:"output_MsisdnToken"`
+		ConversationID           string `json:"output_ConversationID"`
+		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
 )

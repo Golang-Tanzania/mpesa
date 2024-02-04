@@ -95,14 +95,14 @@ func main() {
 	}
 
 	a := mpesa.C2BPaymentRequest{
-		InputAmount:                   "100",
-		InputCustomerMSISDN:           "000000000001",
-		InputCountry:                  "TZN",
-		InputCurrency:                 "TZS",
-		InputServiceProviderCode:      "000000",
-		InputTransactionReference:     "T12344C",
-		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
-		InputPurchasedItemsDesc:       "Test",
+		Amount:                   "100",
+		CustomerMSISDN:           "000000000001",
+		Country:                  "TZN",
+		Currency:                 "TZS",
+		ServiceProviderCode:      "000000",
+		TransactionReference:     "T12344C",
+		ThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		PurchasedItemsDesc:       "Test",
 	}
 	res, err := client.C2BPayment(context.Background(), a)
 
@@ -136,14 +136,14 @@ func main() {
 	}
 
 	c := mpesa.B2CPaymentRequest{
-		InputAmount:                   "100",
-		InputCustomerMSISDN:           "000000000001",
-		InputCountry:                  "TZN",
-		InputCurrency:                 "TZS",
-		InputServiceProviderCode:      "000000",
-		InputTransactionReference:     "T12344C",
-		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
-		InputPaymentItemsDesc:       "Test",
+		Amount:                   "100",
+		CustomerMSISDN:           "000000000001",
+		Country:                  "TZN",
+		Currency:                 "TZS",
+		ServiceProviderCode:      "000000",
+		TransactionReference:     "T12344C",
+		ThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		PaymentItemsDesc:       "Test",
 	}
 
 	res, err := client.B2CPayment(context.Background(), c)
@@ -181,14 +181,14 @@ func main() {
 
 
 	b := mpesa.B2BPaymentRequest{
-		InputAmount:            "100",
-		InputCountry:           "TZN",
-		InputCurrency:          "TZS",
-		InputPrimaryPartyCode: "000000",
-		InputReceiverPartyCode: "000001",
-		InputThirdPartyConversationID: "8a89835c71f15e99396",
-		InputTransactionReference: "T12344C",
-		InputPurchasedItemsDesc: "Test",
+		Amount:            "100",
+		Country:           "TZN",
+		Currency:          "TZS",
+		PrimaryPartyCode: "000000",
+		ReceiverPartyCode: "000001",
+		ThirdPartyConversationID: "8a89835c71f15e99396",
+		TransactionReference: "T12344C",
+		PurchasedItemsDesc: "Test",
 	}
 
 	res, err := client.B2BPayment(context.Background(), b)
@@ -224,11 +224,11 @@ func main() {
 
 
 	d :=  mpesa.ReversalRequest{
-		InputTransactionID: "0000000000001",
-		InputCountry: "TZN",
-		InputServiceProviderCode: "000000",
-		InputReversalAmount: "100",
-		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		TransactionID: "0000000000001",
+		Country: "TZN",
+		ServiceProviderCode: "000000",
+		ReversalAmount: "100",
+		ThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
 	}
 
 	res, err := client.Reversal(context.Background(), d)
@@ -264,10 +264,10 @@ func main() {
 
 
 	e := mpesa.QueryTxStatusRequest{
-		InputQueryReference:           "000000000000000000001",
-		InputCountry:                  "TZN",
-		InputServiceProviderCode:      "000000",
-		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		QueryReference:           "000000000000000000001",
+		Country:                  "TZN",
+		ServiceProviderCode:      "000000",
+		ThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
 	}
 
 	res, err := client.QueryTxStatus(context.Background(), e)
@@ -303,11 +303,11 @@ func main() {
 
 
 	h := mpesa.QueryBenRequest{
-		InputCountry:                  "TZN",
-		InputServiceProviderCode:      "000000",
-		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
-		InputCustomerMSISDN:           "000000000001",
-		InputKycQueryType:             "Name",
+		Country:                  "TZN",
+		ServiceProviderCode:      "000000",
+		ThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		CustomerMSISDN:           "000000000001",
+		KycQueryType:             "Name",
 	}
 
 	res, err := client.QueryBeneficiaryName(context.Background(), h)
@@ -343,16 +343,16 @@ func main() {
 
 
 	i := mpesa.QueryDirectDBReq{
-		InputQueryBalanceAmount:       true,
-		InputBalanceAmount:            "100",
-		InputCountry:                  "TZN",
-		InputCustomerMSISDN:           "255744553111",
-		InputMsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
-		InputServiceProviderCode:      "112244",
-		InputThirdPartyConversationID: "GPO3051656128",
-		InputThirdPartyReference:      "Test123",
-		InputMandateID:                "15045",
-		InputCurrency:                 "TZS",
+		QueryBalanceAmount:       true,
+		BalanceAmount:            "100",
+		Country:                  "TZN",
+		CustomerMSISDN:           "255744553111",
+		MsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
+		ServiceProviderCode:      "112244",
+		ThirdPartyConversationID: "GPO3051656128",
+		ThirdPartyReference:      "Test123",
+		MandateID:                "15045",
+		Currency:                 "TZS",
 	}
 
 	res, err := client.QueryDirectDebit(context.Background(), i)
@@ -388,17 +388,17 @@ func main() {
 
 
 	f := mpesa.DirectDBCreateReq{
-		InputCustomerMSISDN:         "000000000001",
-		InputCountry:                "TZN",
-		InputServiceProviderCode:    "000000",
-		InputThirdPartyReference:    "3333",
-		InputThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
-		InputAgreedTC:               "1",
-		InputFirstPaymentDate:       "20160324",
-		InputFrequency:              "06",
-		InputStartRangeOfDays:       "01",
-		InputEndRangeOfDays:         "22",
-		InputExpiryDate:             "20161126",
+		CustomerMSISDN:         "000000000001",
+		Country:                "TZN",
+		ServiceProviderCode:    "000000",
+		ThirdPartyReference:    "3333",
+		ThirdPartyConversationID: "asv02e5958774f7ba228d83d0d689761",
+		AgreedTC:               "1",
+		FirstPaymentDate:       "20160324",
+		Frequency:              "06",
+		StartRangeOfDays:       "01",
+		EndRangeOfDays:         "22",
+		ExpiryDate:             "20161126",
 	}
 
 	res, err := client.DirectDebitCreate(context.Background(), f)
@@ -434,15 +434,15 @@ func main() {
 
 
 	g := mpesa.DebitDBPaymentReq{
-		InputMsisdnToken:              "AbCd123=",
-		InputCustomerMSISDN:           "000000000001",
-		InputCountry:                  "TZN",
-		InputServiceProviderCode:      "000000",
-		InputThirdPartyReference:      "5db410b459bd433ca8e5",
-		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
-		InputAmount:                   "10",
-		InputCurrency:                 "TZS",
-		InputMandateID:                "15045",
+		MsisdnToken:              "AbCd123=",
+		CustomerMSISDN:           "000000000001",
+		Country:                  "TZN",
+		ServiceProviderCode:      "000000",
+		ThirdPartyReference:      "5db410b459bd433ca8e5",
+		ThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		Amount:                   "10",
+		Currency:                 "TZS",
+		MandateID:                "15045",
 	}
 
 	res, err := client.DirectDebitPayment(context.Background(), g)
@@ -477,13 +477,13 @@ func main() {
 
 
 	j := mpesa.CancelDirectDBReq{
-		InputMsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
-		InputCustomerMSISDN:           "000000000001",
-		InputCountry:                  "TZN",
-		InputServiceProviderCode:      "000000",
-		InputThirdPartyReference:      "00000000000000000001",
-		InputThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
-		InputMandateID:                "15045",
+		MsisdnToken:              "cvgwUBZ3lAO9ivwhWAFeng==",
+		CustomerMSISDN:           "000000000001",
+		Country:                  "TZN",
+		ServiceProviderCode:      "000000",
+		ThirdPartyReference:      "00000000000000000001",
+		ThirdPartyConversationID: "AAA6d1f939c1005v2de053v4912jbasdj1j2kk",
+		MandateID:                "15045",
 	}
 
 	res, err := client.CancelDirectDebit(context.Background(), j)
