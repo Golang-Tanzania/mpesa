@@ -83,7 +83,10 @@ func (c *Client) SetHttpClient(client *http.Client) {
 func (c *Client) createBearerToken(apiKey string) (string, error) {
 
 	keyDer, _ := pem.Decode([]byte(c.fmtPubKey(c.Keys.PublicKey)))
-	pub, err := x509.ParsePKIXPublicKey([]byte(keyDer.Bytes))
+	if keyDer == nil {
+		return "", errors.New("failed to decode PEM block containing public key")
+	}
+	pub, err := x509.ParsePKIXPublicKey(keyDer.Bytes) // Changed to use keyDer.Bytes directly
 	if err != nil {
 		return "", err
 	}
