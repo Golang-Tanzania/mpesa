@@ -86,7 +86,7 @@ func (c *Client) createBearerToken(apiKey string) (string, error) {
 	if keyDer == nil {
 		return "", errors.New("failed to decode PEM block containing public key")
 	}
-	pub, err := x509.ParsePKIXPublicKey(keyDer.Bytes) // Changed to use keyDer.Bytes directly
+	pub, err := x509.ParsePKIXPublicKey(keyDer.Bytes)
 	if err != nil {
 		return "", err
 	}
@@ -137,10 +137,9 @@ func (c *Client) genSessionKey() (*SessionKeyResponse, error) {
 
 // fmtPubKey formats the public key to the required format
 func (c *Client) fmtPubKey(publicKey string) string {
-	pubKey := fmt.Sprintf(`
------BEGIN RSA PUBLIC KEY-----
+	pubKey := fmt.Sprintf(`-----BEGIN PUBLIC KEY-----
 %s
------END RSA PUBLIC KEY-----`, publicKey)
+-----END PUBLIC KEY-----`, publicKey)
 	return pubKey
 }
 
