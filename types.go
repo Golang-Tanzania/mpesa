@@ -23,6 +23,7 @@ SOFTWARE.
 package mpesa
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -276,4 +277,19 @@ type (
 		ConversationID           string `json:"output_ConversationID"`
 		ThirdPartyConversationID string `json:"output_ThirdPartyConversationID"`
 	}
+
+	// MpesaError represents a structured error response from the M-Pesa API.
+	MpesaError struct {
+		ResponseCode    string `json:"output_ResponseCode"`    // Error code from the API
+		ResponseDesc    string `json:"output_ResponseDesc"`    // Error description from the API
+		TransactionID   string `json:"output_TransactionID,omitempty"` // Optional: Transaction ID if available in error
+		ConversationID  string `json:"output_ConversationID,omitempty"` // Optional: Conversation ID if available in error
+		// Store the HTTP status code that led to this error.
+		HTTPStatusCode int `json:"-"` // Ignored by JSON marshalling, used internally
+	}
 )
+
+// Error implements the error interface for MpesaError.
+func (e *MpesaError) Error() string {
+	return fmt.Sprintf("M-Pesa API Error: Code %s - %s (HTTP Status: %d)", e.ResponseCode, e.ResponseDesc, e.HTTPStatusCode)
+}
