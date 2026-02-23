@@ -39,8 +39,6 @@ import (
 	"reflect"
 	"strings"
 	"time"
-
-
 )
 
 // NewClient returns new Client struct
@@ -172,7 +170,6 @@ func (c *Client) sendLocked(req *http.Request, v interface{}, e interface{}) err
 	}(resp.Body)
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		var data []byte
 		data, readErr := io.ReadAll(resp.Body)
 		if readErr != nil {
 			// Even if reading fails, we might have a status code, so return a generic error with status.
