@@ -8,13 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
-
 
 func TestB2BPayment(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulB2BPayment", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-b2b-success"
 		expectedPayload := B2BPaymentRequest{
 			Amount:                   "100",
@@ -49,16 +51,14 @@ func TestB2BPayment(t *testing.T) {
 			}
 
 			response := B2BPaymentResponse{
-				ResponseCode:        "0",
-				ResponseDesc: "OK",
-				TransactionID:       "b2b-txn-123",
+				ResponseCode:  "0",
+				ResponseDesc:  "OK",
+				TransactionID: "b2b-txn-123",
 			}
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(response)
 		}))
 		defer b2bServer.Close()
-
-		
 
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))
 		b2bURL, _ := url.Parse(client.makeUrl(B2BPaymentPath))
@@ -84,6 +84,8 @@ func TestB2BPayment(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`
@@ -103,8 +105,6 @@ func TestB2BPayment(t *testing.T) {
 			w.Write([]byte(errorResponse))
 		}))
 		defer errorServer.Close()
-
-		
 
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))
 		b2bURL, _ := url.Parse(client.makeUrl(B2BPaymentPath))

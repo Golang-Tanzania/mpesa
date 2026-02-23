@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestCancelDirectDebit(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulCancelDirectDebit", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-canceldd-success"
 		expectedPayload := CancelDirectDBReq{
 			MsisdnToken:              "msisdn-token-canceldd",
@@ -97,6 +100,8 @@ func TestCancelDirectDebit(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`

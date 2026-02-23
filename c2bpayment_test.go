@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestC2BPayment(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulC2BPayment", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-c2b-success"
 		expectedPayload := C2BPaymentRequest{
 			Amount:                   "200",
@@ -58,8 +61,6 @@ func TestC2BPayment(t *testing.T) {
 		}))
 		defer c2bServer.Close()
 
-		
-
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))
 		c2bURL, _ := url.Parse(client.makeUrl(C2BPaymentPath))
 		sessionMockURL, _ := url.Parse(sessionServer.URL)
@@ -87,6 +88,8 @@ func TestC2BPayment(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`
@@ -106,8 +109,6 @@ func TestC2BPayment(t *testing.T) {
 			w.Write([]byte(errorResponse))
 		}))
 		defer errorServer.Close()
-
-		
 
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))
 		c2bURL, _ := url.Parse(client.makeUrl(C2BPaymentPath))

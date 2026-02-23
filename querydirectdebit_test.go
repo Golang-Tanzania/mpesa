@@ -1,44 +1,16 @@
 package mpesa
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	// "fmt" // Removed as it might be unused after changes
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"strings"
 	"testing"
-	// "github.com/stretchr/testify/assert" // Removed testify import
+	"time"
 )
-
-// queryTestRedirectingTransport is an http.RoundTripper that rewrites all requests
-// to a specific target scheme and host, preserving the original path and query.
-// It also sets the Host header correctly for the target, crucial for httptest.Server.
-type queryTestRedirectingTransport struct {
-	targetScheme string
-	targetHost   string
-	transport    http.RoundTripper // This is the underlying transport, e.g., http.DefaultTransport
-}
-
-// RoundTrip implements the http.RoundTripper interface.
-func (rt *queryTestRedirectingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	// Clone the request to avoid modifying the original
-	clonedReq := req.Clone(req.Context())
-
-	// Preserve original path and query, but change scheme and host
-	clonedReq.URL.Scheme = rt.targetScheme
-	clonedReq.URL.Host = rt.targetHost
-
-	// Set the Host header to match the target, which is crucial for httptest.Server
-	clonedReq.Host = rt.targetHost
-
-	// Proceed with the modified request using the underlying transport
-	return rt.transport.RoundTrip(clonedReq)
-}
 
 // apiError is used to mock API error responses.
 type apiError struct {
@@ -46,13 +18,8 @@ type apiError struct {
 	ResponseDesc string `json:"output_ResponseDesc"`
 }
 
-// jsonResponseBody is a helper to create an io.ReadCloser from a byte slice.
-func jsonResponseBody(data []byte) io.ReadCloser {
-	return io.NopCloser(bytes.NewBuffer(data))
-}
-
 func TestClient_QueryDirectDebit(t *testing.T) {
-	client, _, _ := newTestClientWithKeys(t) // Corrected call
+	client, _, _ := newTestClientWithKeys(t)
 
 	ctx := context.Background()
 
@@ -110,10 +77,10 @@ func TestClient_QueryDirectDebit(t *testing.T) {
 				PaymentDayTo:             "5",
 				ExpiryDate:               "2024-01-01",
 			},
-			wantErr:              false,
-			wantErrPayload:       nil,
+			wantErr:        false,
+			wantErrPayload: nil,
 			// sessionKeyPathSuffix and apiPathSuffix are no longer used for path matching in handler
-			// sessionKeyPathSuffix: SessionEndPath, 
+			// sessionKeyPathSuffix: SessionEndPath,
 			// apiPathSuffix:        QueryDirectDBPath,
 			expectedQuery: url.Values{
 				"input_Country":                  []string{"TZN"},
@@ -222,22 +189,18 @@ func TestClient_QueryDirectDebit(t *testing.T) {
 			defer mockServer.Close()
 
 			// Create a redirecting transport
+			client.SessionKey = ""
+			client.ExpiresAt = time.Time{}
 			mockServerTargetURL, _ := url.Parse(mockServer.URL)
-			rdt := &queryTestRedirectingTransport{ // Renamed
-				targetScheme: mockServerTargetURL.Scheme,
-				targetHost:   mockServerTargetURL.Host,
-				transport:    http.DefaultTransport, // Ensure this field matches the struct definition
-			}
 
-			originalHTTPClient := client.Client // Store the original client
-			
-			// Create a new http.Client that uses our queryTestRedirectingTransport
-			mockRedirectingHttpClient := &http.Client{
-				Transport: rdt,
-			}
-			client.SetHttpClient(mockRedirectingHttpClient) // Set this new client on our mpesa client
+			originalHTTPClient := client.Client
+			client.SetHttpClient(&http.Client{
+				Transport: &allRedirectingTransport{
+					targetURL: mockServerTargetURL,
+					transport: http.DefaultTransport,
+				},
+			})
 
-			// Restore original http client after test
 			defer func() {
 				client.SetHttpClient(originalHTTPClient)
 			}()
@@ -276,4 +239,3 @@ func TestClient_QueryDirectDebit(t *testing.T) {
 		})
 	}
 }
-

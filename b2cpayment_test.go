@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestB2CPayment(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulB2CPayment", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-b2c-success"
 		expectedPayload := B2CPaymentRequest{
 			Amount:                   "300",
@@ -85,6 +88,8 @@ func TestB2CPayment(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`

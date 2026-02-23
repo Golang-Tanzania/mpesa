@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestQueryBeneficiaryName(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulQueryBeneficiaryName", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-queryben-success"
 		expectedPayload := QueryBenRequest{
 			CustomerMSISDN:           "255700000005",
@@ -93,6 +96,8 @@ func TestQueryBeneficiaryName(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`

@@ -13,26 +13,6 @@ import (
 	"time"
 )
 
-// queryTxStatusTestRedirectingTransport is a custom http.RoundTripper to redirect requests to the mock server.
-// It also sets the Host header correctly for the mock server.
-type queryTxStatusTestRedirectingTransport struct {
-	targetURL *url.URL
-	transport http.RoundTripper
-}
-
-func (t *queryTxStatusTestRedirectingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	// Rewrite the request URL to point to the mock server
-	req.URL.Scheme = t.targetURL.Scheme
-	req.URL.Host = t.targetURL.Host
-	req.Host = t.targetURL.Host // Also set the Host header
-
-	// Use the underlying transport (e.g., http.DefaultTransport) to execute the request
-	if t.transport == nil {
-		return http.DefaultTransport.RoundTrip(req)
-	}
-	return t.transport.RoundTrip(req)
-}
-
 // Helper to create a JSON response body for the mock server
 func jsonResponseBodyTxStatus(t *testing.T, data interface{}) []byte {
 	t.Helper()
@@ -52,20 +32,20 @@ func jsonResponseBodyTxStatus(t *testing.T, data interface{}) []byte {
 func TestClient_QueryTxStatus(t *testing.T) {
 	// Common session key response for mock server
 	sessionKeyResp := SessionKeyResponse{
-		OutputResponseCode: "0", // Corrected field name
+		OutputResponseCode: "0",                                  // Corrected field name
 		OutputResponseDesc: "Session key generated successfully", // Corrected field name
 		OutputSessionID:    "testsessionkey",
 	}
 
 	tests := []struct {
-		name             string
-		payload          QueryTxStatusRequest
-		mockStatus       int
-		mockResponse     interface{}
-		want             *QueryTxStatusResponse
-		wantErr          bool
-		wantErrPayload   *MpesaError // Changed to MpesaError
-		expectedQuery    url.Values
+		name           string
+		payload        QueryTxStatusRequest
+		mockStatus     int
+		mockResponse   interface{}
+		want           *QueryTxStatusResponse
+		wantErr        bool
+		wantErrPayload *MpesaError // Changed to MpesaError
+		expectedQuery  url.Values
 	}{
 		{
 			name: "success",
@@ -110,15 +90,15 @@ func TestClient_QueryTxStatus(t *testing.T) {
 			},
 			mockStatus: http.StatusBadRequest, // Or appropriate error code
 			mockResponse: MpesaError{ // Changed to MpesaError
-				ResponseCode: "INS-1", // Example error code
-				ResponseDesc: "Transaction not found",
+				ResponseCode:   "INS-1", // Example error code
+				ResponseDesc:   "Transaction not found",
 				HTTPStatusCode: http.StatusBadRequest, // Store the HTTP status for completeness
 			},
 			want:    nil,
 			wantErr: true,
 			wantErrPayload: &MpesaError{ // Changed to MpesaError
-				ResponseCode: "INS-1",
-				ResponseDesc: "Transaction not found",
+				ResponseCode:   "INS-1",
+				ResponseDesc:   "Transaction not found",
 				HTTPStatusCode: http.StatusBadRequest,
 			},
 			expectedQuery: url.Values{
@@ -194,8 +174,8 @@ func TestClient_QueryTxStatus(t *testing.T) {
 				t.Fatalf("Failed to create client: %v", err)
 			}
 			client.SetHttpClient(&http.Client{
-				Transport: &queryTxStatusTestRedirectingTransport{targetURL: mockServerURL},
-				Timeout:   10 * time.Second, // Add a timeout for tests
+				Transport: &allRedirectingTransport{targetURL: mockServerURL},
+				Timeout:   10 * time.Second,
 			})
 
 			// Make the actual call
@@ -217,7 +197,7 @@ func TestClient_QueryTxStatus(t *testing.T) {
 						// while apiErr.HTTPStatusCode would be set by sendLocked if it's modified to do so.
 						// For now, primarily check ResponseCode and ResponseDesc.
 						if apiErr.ResponseCode != tt.wantErrPayload.ResponseCode || apiErr.ResponseDesc != tt.wantErrPayload.ResponseDesc {
-							t.Errorf("QueryTxStatus() MpesaError fields mismatch. Got ResponseCode: '%s', ResponseDesc: '%s'. Want ResponseCode: '%s', ResponseDesc: '%s'", 
+							t.Errorf("QueryTxStatus() MpesaError fields mismatch. Got ResponseCode: '%s', ResponseDesc: '%s'. Want ResponseCode: '%s', ResponseDesc: '%s'",
 								apiErr.ResponseCode, apiErr.ResponseDesc, tt.wantErrPayload.ResponseCode, tt.wantErrPayload.ResponseDesc)
 						}
 					} else {

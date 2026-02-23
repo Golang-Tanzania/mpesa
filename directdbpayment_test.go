@@ -33,14 +33,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
-
-
 
 func TestDirectDebitPayment(t *testing.T) {
 	client, pubKeyBase64, privKey := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulDirectDebitPayment", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		// Test data
 		const testSessionID = "test-session-id-12345"
 		expectedPayload := DebitDBPaymentReq{
@@ -126,7 +127,6 @@ func TestDirectDebitPayment(t *testing.T) {
 		defer debitServer.Close()
 
 		// Create client with the redirector
-		
 
 		// Set up the redirector for both session key and direct debit requests
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))
@@ -165,6 +165,8 @@ func TestDirectDebitPayment(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		// Mock session server for genSessionKey call
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
@@ -188,7 +190,6 @@ func TestDirectDebitPayment(t *testing.T) {
 		defer errorServer.Close()
 
 		// Create client with the redirector
-		
 
 		// Set up the redirector
 		sessionURL, _ := url.Parse(client.makeUrl(SessionEndPath))

@@ -8,12 +8,15 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestDirectDebitCreate(t *testing.T) {
 	client, pubKeyBase64, _ := newTestClientWithKeys(t)
 
 	t.Run("SuccessfulDirectDebitCreate", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		const testSessionID = "test-session-id-ddcreate-success"
 		expectedPayload := DirectDBCreateReq{
 			CustomerMSISDN:           "255700000004",
@@ -24,7 +27,6 @@ func TestDirectDebitCreate(t *testing.T) {
 			Frequency:                "06", // Monthly
 			FirstPaymentDate:         "20250101",
 			ExpiryDate:               "20260101",
-
 		}
 
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +88,8 @@ func TestDirectDebitCreate(t *testing.T) {
 	})
 
 	t.Run("ErrorResponse", func(t *testing.T) {
+		client.SessionKey = ""
+		client.ExpiresAt = time.Time{}
 		sessionServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionKeyResponse := struct {
 				OutputSessionKey string `json:"output_SessionKey"`

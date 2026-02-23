@@ -5,11 +5,32 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"net/http"
+	"net/url"
 	"testing"
 )
 
 // TestHelperFunctions is a dummy test to ensure this file is compiled.
 func TestHelperFunctions(t *testing.T) {}
+
+// allRedirectingTransport is a shared http.RoundTripper that redirects ALL requests
+// to a single mock server URL. It preserves the original path and query.
+type allRedirectingTransport struct {
+	targetURL *url.URL
+	transport http.RoundTripper
+}
+
+func (t *allRedirectingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	clonedReq := req.Clone(req.Context())
+	clonedReq.URL.Scheme = t.targetURL.Scheme
+	clonedReq.URL.Host = t.targetURL.Host
+	clonedReq.Host = t.targetURL.Host
+
+	if t.transport == nil {
+		return http.DefaultTransport.RoundTrip(clonedReq)
+	}
+	return t.transport.RoundTrip(clonedReq)
+}
 
 // newTestClientWithKeys generates an RSA key pair, creates a new M-Pesa client,
 // and sets the public key on the client. It returns the configured client,
