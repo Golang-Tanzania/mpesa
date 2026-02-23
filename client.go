@@ -37,9 +37,8 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"strings"
 	"time"
-
-
 )
 
 // NewClient returns new Client struct
@@ -83,7 +82,10 @@ func (c *Client) SetHttpClient(client *http.Client) {
 func (c *Client) createBearerToken(apiKey string) (string, error) {
 
 	keyDer, _ := pem.Decode([]byte(c.fmtPubKey(c.Keys.PublicKey)))
-	pub, err := x509.ParsePKIXPublicKey([]byte(keyDer.Bytes))
+	if keyDer == nil {
+		return "", errors.New("failed to decode PEM block containing public key")
+	}
+	pub, err := x509.ParsePKIXPublicKey(keyDer.Bytes)
 	if err != nil {
 		return "", err
 	}
@@ -134,21 +136,19 @@ func (c *Client) genSessionKey() (*SessionKeyResponse, error) {
 
 // fmtPubKey formats the public key to the required format
 func (c *Client) fmtPubKey(publicKey string) string {
-	pubKey := fmt.Sprintf(`
------BEGIN RSA PUBLIC KEY-----
+	pubKey := fmt.Sprintf(`-----BEGIN PUBLIC KEY-----
 %s
------END RSA PUBLIC KEY-----`, publicKey)
+-----END PUBLIC KEY-----`, publicKey)
 	return pubKey
 }
 
-// Send makes a request to the API, the response body will be
-// unmarshalled into v, or if v is an io.Writer, the response will
-// be written to it without decoding
-func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
+// sendLocked contains the core logic for sending a request and processing the response.
+// It assumes that any necessary mutex locks are handled by the caller.
+func (c *Client) sendLocked(req *http.Request, v interface{}, e interface{}) error {
 	var (
 		err  error
 		resp *http.Response
-		data []byte
+		// data []byte // Removed as it's declared and used locally in the error handling block
 	)
 
 	// Set default headers
@@ -170,21 +170,42 @@ func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
 	}(resp.Body)
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-
-		data, err = io.ReadAll(resp.Body)
-
-		if e == nil {
-			return fmt.Errorf("unknown error (%s), status code: %d", string(data), resp.StatusCode)
+		data, readErr := io.ReadAll(resp.Body)
+		if readErr != nil {
+			// Even if reading fails, we might have a status code, so return a generic error with status.
+			// If data was partially read, it won't be used here.
+			return fmt.Errorf("API request failed with status %d and error reading response body: %w", resp.StatusCode, readErr)
 		}
 
-		if err == nil && len(data) > 0 {
-			err := json.Unmarshal(data, e)
-			if err != nil {
-				return err
+		// Attempt to unmarshal into the provided error interface 'e' first, if it's not nil.
+		if e != nil {
+			if len(data) > 0 {
+				if unmarshalErr := json.Unmarshal(data, e); unmarshalErr == nil {
+					// Try to assert 'e' to MpesaError to set HTTPStatusCode
+					if mpesaErr, ok := e.(*MpesaError); ok {
+						mpesaErr.HTTPStatusCode = resp.StatusCode
+						return mpesaErr // Return the populated MpesaError from 'e'
+					}
+					// If 'e' is not *MpesaError but unmarshalled, return a generic error including 'e'
+					// This path is less ideal as 'e' itself might not implement error interface.
+					// For now, we'll assume if 'e' is provided, the caller knows its type.
+					// A better approach would be for 'e' to always be an 'error' implementer.
+					return fmt.Errorf("API error (status %d), payload unmarshalled into provided type: %v", resp.StatusCode, e)
+				}
+			}
+		} else {
+			// If 'e' is nil, try to unmarshal into our standard MpesaError.
+			mpesaAPIErr := &MpesaError{}
+			if len(data) > 0 {
+				if unmarshalErr := json.Unmarshal(data, mpesaAPIErr); unmarshalErr == nil {
+					mpesaAPIErr.HTTPStatusCode = resp.StatusCode
+					return mpesaAPIErr // Return the populated MpesaError
+				}
 			}
 		}
 
-		return fmt.Errorf("unknown error, status code: %d", resp.StatusCode)
+		// Fallback if unmarshalling into 'e' or MpesaError fails, or if body is empty.
+		return fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(data))
 	}
 	if v == nil {
 		return nil
@@ -195,7 +216,15 @@ func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
 		return err
 	}
 	return json.NewDecoder(resp.Body).Decode(v)
+}
 
+// Send makes a request to the API, the response body will be
+// unmarshalled into v, or if v is an io.Writer, the response will
+// be written to it without decoding. It handles mutex locking.
+func (c *Client) Send(req *http.Request, v interface{}, e interface{}) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.sendLocked(req, v, e)
 }
 
 // SendWithAuth makes a request to the API and apply authentication automatically.
@@ -210,7 +239,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}, e interface{}) e
 
 	req.Header.Set("Authorization", bearer)
 
-	return c.Send(req, v, e)
+	return c.sendLocked(req, v, e) // Call sendLocked to avoid re-locking c.mu
 }
 
 // SendWithSessionKey makes a request to the API using generated sessionkey as bearer token.
@@ -280,12 +309,19 @@ func (c *Client) QueryValuesFromStruct(payload interface{}) (url.Values, error) 
 		field := payloadValue.Type().Field(i)
 		fieldValue := payloadValue.Field(i)
 
-		tag := field.Tag.Get("json")
-		if tag == "" {
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == "" {
+			continue
+		}
+		// Parse the tag to get only the name, ignore options like omitempty
+		tagParts := strings.Split(jsonTag, ",")
+		paramName := tagParts[0]
+
+		if paramName == "" { // Should not happen with valid tags, but good practice
 			continue
 		}
 
-		values.Add(tag, fmt.Sprint(fieldValue.Interface()))
+		values.Add(paramName, fmt.Sprint(fieldValue.Interface()))
 	}
 
 	return values, nil
